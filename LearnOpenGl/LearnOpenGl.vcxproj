@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Opengl\glfw-3.3.2.bin.WIN32\include;D:\Opengl\glew-2.1.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Opengl\glfw-3.3.2.bin.WIN32\include;D:\Opengl\glad\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Opengl\glfw-3.3.2.bin.WIN32\lib-vc2015;D:\Opengl\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
