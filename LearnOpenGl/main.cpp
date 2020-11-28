@@ -29,6 +29,9 @@ float vertices[] = {
 	0.0f,0.5f,0.0f
 };
 
+void onStart();
+void onUpdate();
+void onDestroy();
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
@@ -131,6 +134,8 @@ int main()
 	// 开关绘制线框
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+	onStart();
+
 	// 渲染循环
 	//--------------------------------------------------------------------------------------
 	while (!glfwWindowShouldClose(window)) // 我们每次循环的开始前检查一次GLFW是否被要求退出，如果是的话该函数返回true然后渲染循环便结束了
@@ -143,10 +148,12 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);	// 设置状态
 		glClear(GL_COLOR_BUFFER_BIT);			// 使用状态
 
+		onUpdate();
+
 		// 绘制图形
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
-		glDrawArrays(GL_TRIANGLES,0,3);			
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);					// 不需要每次都解绑
 
 		// 检查并调用事件，交换缓冲
@@ -156,8 +163,14 @@ int main()
 
 	// 释放资源
 	//--------------------------------------------------------------------------------------
+	onDestroy();
 
-	// 释放GLFW资源
+	// 释放 shader 资源
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteProgram(shaderProgram);
+
+	// 释放 GLFW 资源
 	glfwTerminate();				// 当渲染循环结束后我们需要正确释放/删除之前的分配的所有资源 这样便能清理所有的资源并正确地退出应用程序
 	return 0;
 }
@@ -173,4 +186,16 @@ void processInput(GLFWwindow* window) {
 	{
 		glfwSetWindowShouldClose(window, true);
 	}
+}
+
+void onStart() {
+
+}
+
+void onUpdate() {
+
+}
+
+void onDestroy() {
+
 }
