@@ -28,6 +28,18 @@ float triVertices[] = {
 	 0.5f, -0.5f, 0.0f,
 	 0.0f,  0.5f, 0.0f
 };
+// 矩形顶点
+float rectVertices[] = {
+	-0.5f, -0.5f, 0.0f,			// 左下角
+	 0.5f, -0.5f, 0.0f,			// 右下角
+	 0.5f,  0.5f, 0.0f,			// 右上角
+	-0.5f,  0.5f, 0.0f			// 左上角
+};
+// 顶点索引
+unsigned int indices[] = {
+	0, 1, 2,
+	0, 2, 3
+};
 
 void onStart();
 void onUpdate();
@@ -114,14 +126,19 @@ int main()
 
 	// 设置顶点数据 配置顶点属性
 	//--------------------------------------------------------------------------------------
-	unsigned int VBO, VAO;
+	unsigned int VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 	// 首先绑定VAO, 然后绑定并设置VBO, 然后设置顶点属性
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triVertices), triVertices, GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(triVertices), triVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(rectVertices), rectVertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -132,7 +149,7 @@ int main()
 	glBindVertexArray(0);
 
 	// 开关绘制线框
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	onStart();
 
@@ -153,8 +170,9 @@ int main()
 		// 绘制图形
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);					// 不需要每次都解绑
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glBindVertexArray(0);					// 不需要每次都解绑
 
 		// 检查并调用事件，交换缓冲
 		glfwPollEvents();			// 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
@@ -168,6 +186,7 @@ int main()
 	// 释放 shader 资源
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
 	// 释放 GLFW 资源
