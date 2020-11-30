@@ -32,11 +32,11 @@ unsigned int indices[] = {
 };
 
 unsigned int indices1[] = {
-	0, 3, 6
+	0, 3, 5
 };
 
 unsigned int indices2[] = {
-	1, 2, 5
+	1, 2, 6
 };
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
