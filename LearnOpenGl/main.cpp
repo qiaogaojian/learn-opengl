@@ -136,15 +136,14 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);			// 使用状态
 
 		// 绘制图形
-		shaderLoader1.use();
-		//int uniColorLocation1 = glGetUniformLocation(shaderProgram, "uniColor1");
 		float time = glfwGetTime();
 		float alpha = (sin(time) / 2.0f) + 0.5f;
-		//glUniform4f(uniColorLocation1, 1.0f, alpha, 0.0f, 1.0f);
+		shaderLoader1.use();
+		shaderLoader1.setFloat("offsetX", alpha);
 
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		//glBindVertexArray(0);						// 不需要每次都解绑
 
 		shaderLoader2.use();
