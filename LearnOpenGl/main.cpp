@@ -34,12 +34,22 @@ float rectVertices[] = {
 	 0.5f, -0.5f, 0.0f,			// 右下角
 	 0.5f,  0.5f, 0.0f,			// 右上角
 	-0.5f,  0.5f, 0.0f,			// 左上角
-	 0.0f,  0.0f, 0.0f
+	 0.0f,  0.0f, 0.0f,			// 中间
+	 0.0f,  0.5f, 0.0f,			// 中上
+	 0.0f, -0.5f, 0.0f			// 中下
 };
 // 顶点索引
 unsigned int indices[] = {
 	0, 3, 4,
 	1, 2, 4
+};
+
+unsigned int indices1[] = {
+	0, 3, 6
+};
+
+unsigned int indices2[] = {
+	1, 2, 5
 };
 
 void onStart();
@@ -127,19 +137,33 @@ int main()
 
 	// 设置顶点数据 配置顶点属性
 	//--------------------------------------------------------------------------------------
-	unsigned int VBO, VAO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	unsigned int VAO[2], VBO[2], EBO[2];
+	glGenVertexArrays(2, VAO);
+	glGenBuffers(2, VBO);
+	glGenBuffers(2, EBO);
 	// 首先绑定VAO, 然后绑定并设置VBO, 然后设置顶点属性
-	glBindVertexArray(VAO);
+	glBindVertexArray(VAO[0]);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(triVertices), triVertices, GL_STATIC_DRAW);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rectVertices), rectVertices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices1), indices1, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+
+	// 第二个图形
+	glBindVertexArray(VAO[1]);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(triVertices), triVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(rectVertices), rectVertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[1]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices2), indices2, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -170,10 +194,12 @@ int main()
 
 		// 绘制图形
 		glUseProgram(shaderProgram);
-		glBindVertexArray(VAO);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
+		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		//glBindVertexArray(0);					// 不需要每次都解绑
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		//glBindVertexArray(0);						// 不需要每次都解绑
+		glBindVertexArray(VAO[1]);
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
 		// 检查并调用事件，交换缓冲
 		glfwPollEvents();			// 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
@@ -185,9 +211,9 @@ int main()
 	onDestroy();
 
 	// 释放 shader 资源
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	glDeleteVertexArrays(2, VAO);
+	glDeleteBuffers(2, VBO);
+	glDeleteBuffers(2, EBO);
 	glDeleteProgram(shaderProgram);
 
 	// 释放 GLFW 资源
