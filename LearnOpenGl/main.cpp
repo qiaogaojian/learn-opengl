@@ -253,6 +253,7 @@ int main()
 	glDeleteBuffers(2, VBO);
 	glDeleteBuffers(2, EBO);
 	glDeleteProgram(shaderProgram);
+	glDeleteProgram(shaderProgramYellow);
 
 	// 释放 GLFW 资源
 	glfwTerminate();				// 当渲染循环结束后我们需要正确释放/删除之前的分配的所有资源 这样便能清理所有的资源并正确地退出应用程序
