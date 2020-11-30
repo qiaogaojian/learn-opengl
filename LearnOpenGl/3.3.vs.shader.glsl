@@ -6,5 +6,5 @@ uniform float offsetX;
 void main()
 {
 	gl_Position = vec4(aPos.x + offsetX,aPos.y,aPos.z,1.0);
-	outColor = aColor;					// 将outColor设置为从顶点数据哪里得到的输入颜色
+	outColor = vec3(gl_Position.x,gl_Position.y,gl_Position.z);					// 将outColor设置为从顶点数据哪里得到的输入颜色
 };
