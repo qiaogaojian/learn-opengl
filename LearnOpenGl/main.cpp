@@ -1,7 +1,7 @@
 ﻿#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
 #include "shader_loader.h"
+#include "stb_image.h"
 
 #include <iostream>
 using namespace std;
@@ -17,13 +17,14 @@ float triVertices[] = {
 };
 // 矩形顶点
 float rectVertices[] = {
-	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	// 0左下角
-	 0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	// 1右下角
-	 0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	// 2右上角
-	-0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	// 3左上角
-	 0.0f,  0.0f, 0.0f,		0.0f, 0.0f, 0.0f,	// 4中间
-	 0.0f,  0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	// 5中上
-	 0.0f, -0.5f, 0.0f,		0.0f, 0.0f, 1.0f	// 6中下
+	//	 -- 位置 --			   -- 颜色 --		--纹理坐标--
+	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	0.0f, 0.0f,	// 0 左下角
+	 0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 0.0f,	// 1 右下角
+	 0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	1.0f, 1.0f,	// 2 右上角
+	-0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.0f, 1.0f,	// 3 左上角
+	 0.0f,  0.0f, 0.0f,		0.0f, 0.0f, 0.0f,	0.5f, 0.5f,	// 4 中间
+	 0.0f,  0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.5f, 1.0f,	// 5 中上
+	 0.0f, -0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.5f, 0.0f	// 6 中下
 };
 // 顶点索引
 unsigned int indices[] = {
@@ -32,11 +33,12 @@ unsigned int indices[] = {
 };
 
 unsigned int indices1[] = {
-	0, 3, 5
+	0, 1, 2,
+	0, 2, 3
 };
 
 unsigned int indices2[] = {
-	1, 2, 6
+	0, 1, 2
 };
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -95,11 +97,14 @@ int main()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices1), indices1, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);					// 位置属性
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);					// 位置属性
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float))); // 颜色属性  3 * sizeof(float)是偏移量
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))); // 颜色属性  3 * sizeof(float)是偏移量
 	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));	// 纹理属性
+	glEnableVertexAttribArray(2);
 
 
 	// 第二个图形
@@ -112,8 +117,14 @@ int main()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[1]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices2), indices2, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 	// glVertexAttribPointer() 函数把VBO注册到顶点的属性,这里可以安全的解绑
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -122,6 +133,66 @@ int main()
 
 	// 开关绘制线框
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	// 加载和创建材质
+	//--------------------------------------------------------------------------------------
+	// 第一个材质
+	unsigned int texture1;
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
+
+	// 设置 材质延申类型
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// 设置 材质Mipmap过渡类型
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// 加载图片 创建材质 生成mipmaps
+	int width;
+	int height;
+	int channels;
+	string imgPath = "box.jpg";
+	string facePath = "awesomeface.png";
+	unsigned char* data = stbi_load(imgPath.c_str(), &width, &height, &channels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		cout << "加载材质失败" << endl;
+	}
+	stbi_image_free(data);
+
+	// 第二个材质
+	unsigned int texture2;
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	// 设置 材质延申类型
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// 设置 材质Mipmap过渡类型
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* dataFace = stbi_load(facePath.c_str(), &width, &height, &channels, 0);
+	if (dataFace)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dataFace);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		cout << "加载材质失败" << endl;
+	}
+	stbi_image_free(dataFace);
+
+	shaderLoader1.use();
+	shaderLoader1.setInt("texture1", 0);
+	shaderLoader1.setInt("texture2", 1);
+
 
 	// 渲染循环
 	//--------------------------------------------------------------------------------------
@@ -136,20 +207,17 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);			// 使用状态
 
 		// 绘制图形
-		float time = glfwGetTime();
-		float alpha = (sin(time) / 2.0f) + 0.5f;
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
 		shaderLoader1.use();
-		shaderLoader1.setFloat("offsetX", alpha);
-
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
-		//glBindVertexArray(0);						// 不需要每次都解绑
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		shaderLoader2.use();
-		shaderLoader2.setFloat("uniColor2", alpha);
-		glBindVertexArray(VAO[1]);
-		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		//shaderLoader2.use();
+		//glBindVertexArray(VAO[1]);
+		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
 		// 检查并调用事件，交换缓冲
 		glfwPollEvents();			// 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
