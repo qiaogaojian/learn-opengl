@@ -27,13 +27,13 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="3.3.fs.shader1.glsl">
-      <Filter>源文件</Filter>
-    </Text>
-    <Text Include="3.3.fs.shader2.glsl">
-      <Filter>源文件</Filter>
+      <Filter>资源文件</Filter>
     </Text>
     <Text Include="3.3.vs.shader.glsl">
-      <Filter>源文件</Filter>
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="3.3.fs.shader2.glsl">
+      <Filter>资源文件</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
