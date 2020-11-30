@@ -20,8 +20,17 @@ const char* fragmentShaderSource =
 "out vec4 FragColor;\n"
 "void main()\n"
 "{\n"
-"	FragColor = vec4(1.0f,0.5f,0.2f,1.0f);\n"
+"	FragColor = vec4(1.0f,0.0f,0.0f,1.0f);\n"
 "}\n\0";
+
+const char* fragmentShaderSourceYellow =
+"#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"	FragColor = vec4(1.0f,1.0f,0.0f,1.0f);\n"
+"}\n\0";
+
 // 三角形顶点
 float triVertices[] = {
 	-0.5f, -0.5f, 0.0f,
@@ -131,9 +140,34 @@ int main()
 		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
 		cout << "错误::Shader::程序::链接失败\n" << infoLog << endl;
 	}
+
+	// 第二个shader
+	int fragmentShaderYellow = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShaderYellow, 1, &fragmentShaderSourceYellow, NULL);
+	glCompileShader(fragmentShaderYellow);
+	glGetShaderiv(fragmentShaderYellow, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(fragmentShaderYellow, 512, NULL, infoLog);
+		cout << "错误::片元Shader::编译错误\n" << infoLog << endl;
+	}
+
+	int shaderProgramYellow = glCreateProgram();
+	glAttachShader(shaderProgramYellow, vertexShader);
+	glAttachShader(shaderProgramYellow, fragmentShaderYellow);
+	glLinkProgram(shaderProgramYellow);
+
+	glGetProgramiv(shaderProgramYellow, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		glGetProgramInfoLog(shaderProgramYellow, 512, NULL, infoLog);
+		cout << "错误::Shader::程序::链接失败\n" << infoLog << endl;
+	}
+
 	// 链接后释放已经不需要的 shader
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+	glDeleteShader(fragmentShaderYellow);
 
 	// 设置顶点数据 配置顶点属性
 	//--------------------------------------------------------------------------------------
@@ -156,6 +190,8 @@ int main()
 
 
 	// 第二个图形
+	glAttachShader(shaderProgram, fragmentShaderYellow);
+	glDeleteShader(fragmentShaderYellow);
 	glBindVertexArray(VAO[1]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
@@ -174,7 +210,7 @@ int main()
 	glBindVertexArray(0);
 
 	// 开关绘制线框
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	onStart();
 
@@ -198,6 +234,8 @@ int main()
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 		//glBindVertexArray(0);						// 不需要每次都解绑
+
+		glUseProgram(shaderProgramYellow);
 		glBindVertexArray(VAO[1]);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
