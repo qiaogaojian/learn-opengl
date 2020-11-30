@@ -18,10 +18,10 @@ float triVertices[] = {
 // 矩形顶点
 float rectVertices[] = {
 	//	 -- 位置 --			   -- 颜色 --		--纹理坐标--
-	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	2.0f, 0.0f,	// 0 左下角
-	 0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	0.0f, 0.0f,	// 1 右下角
-	 0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.0f, 2.0f,	// 2 右上角
-	-0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	2.0f, 2.0f,	// 3 左上角
+	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	0.75f, 0.25f,	// 0 左下角
+	 0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	0.25f, 0.25f,	// 1 右下角
+	 0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.25f, 0.75f,	// 2 右上角
+	-0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.75f, 0.75f,	// 3 左上角
 	 0.0f,  0.0f, 0.0f,		0.0f, 0.0f, 0.0f,	0.5f, 0.5f,	// 4 中间
 	 0.0f,  0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.5f, 1.0f,	// 5 中上
 	 0.0f, -0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.5f, 0.0f	// 6 中下
@@ -40,6 +40,8 @@ unsigned int indices1[] = {
 unsigned int indices2[] = {
 	0, 1, 2
 };
+
+float factor = 0.5f;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -145,8 +147,8 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	// 设置 材质Mipmap过渡类型
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	// 加载图片 创建材质 生成mipmaps
 	int width;
 	int height;
@@ -173,8 +175,8 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	// 设置 材质Mipmap过渡类型
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char* dataFace = stbi_load(facePath.c_str(), &width, &height, &channels, 0);
