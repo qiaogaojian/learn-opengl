@@ -18,10 +18,10 @@ float triVertices[] = {
 // 矩形顶点
 float rectVertices[] = {
 	//	 -- 位置 --			   -- 颜色 --		--纹理坐标--
-	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	0.75f, 0.25f,	// 0 左下角
-	 0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	0.25f, 0.25f,	// 1 右下角
-	 0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.25f, 0.75f,	// 2 右上角
-	-0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.75f, 0.75f,	// 3 左上角
+	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 0.0f,	// 0 左下角
+	 0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	0.0f, 0.0f,	// 1 右下角
+	 0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.0f, 1.0f,	// 2 右上角
+	-0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	1.0f, 1.0f,	// 3 左上角
 	 0.0f,  0.0f, 0.0f,		0.0f, 0.0f, 0.0f,	0.5f, 0.5f,	// 4 中间
 	 0.0f,  0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.5f, 1.0f,	// 5 中上
 	 0.0f, -0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.5f, 0.0f	// 6 中下
@@ -194,6 +194,7 @@ int main()
 	shaderLoader1.use();
 	shaderLoader1.setInt("texture1", 0);
 	shaderLoader1.setInt("texture2", 1);
+	shaderLoader1.setFloat("factor", factor);
 
 
 	// 渲染循环
@@ -214,6 +215,7 @@ int main()
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
 		shaderLoader1.use();
+		shaderLoader1.setFloat("factor", factor);
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -248,5 +250,21 @@ void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
+	}
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+		factor += 0.001f;
+		if (factor >= 1.0f)
+		{
+			factor = 1.0f;
+		}
+	}
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		factor -= 0.001f;
+		if (factor <= 0)
+		{
+			factor = 0;
+		}
 	}
 }
