@@ -149,10 +149,10 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="shaderLoader.cpp" />
+    <ClCompile Include="shader_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="shaderLoader.h" />
+    <ClInclude Include="shader_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="3.3.fs.shader2.glsl">
