@@ -18,10 +18,10 @@ float triVertices[] = {
 // 矩形顶点
 float rectVertices[] = {
 	//	 -- 位置 --			   -- 颜色 --		--纹理坐标--
-	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 0.0f,	// 0 左下角
+	-0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	2.0f, 0.0f,	// 0 左下角
 	 0.5f, -0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	0.0f, 0.0f,	// 1 右下角
-	 0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.0f, 1.0f,	// 2 右上角
-	-0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	1.0f, 1.0f,	// 3 左上角
+	 0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	0.0f, 2.0f,	// 2 右上角
+	-0.5f,  0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	2.0f, 2.0f,	// 3 左上角
 	 0.0f,  0.0f, 0.0f,		0.0f, 0.0f, 0.0f,	0.5f, 0.5f,	// 4 中间
 	 0.0f,  0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.5f, 1.0f,	// 5 中上
 	 0.0f, -0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.5f, 0.0f	// 6 中下
@@ -170,7 +170,7 @@ int main()
 	glGenTextures(1, &texture2);
 	glBindTexture(GL_TEXTURE_2D, texture2);
 	// 设置 材质延申类型
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	// 设置 材质Mipmap过渡类型
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
