@@ -18,17 +18,19 @@ const char* vertexShaderSource =
 const char* fragmentShaderSource =
 "#version 330 core\n"
 "out vec4 FragColor;\n"
+"uniform vec4 uniColor1;"
 "void main()\n"
 "{\n"
-"	FragColor = vec4(1.0f,0.0f,0.0f,1.0f);\n"
+"	FragColor = uniColor1;\n"
 "}\n\0";
 
 const char* fragmentShaderSourceYellow =
 "#version 330 core\n"
 "out vec4 FragColor;\n"
+"uniform float uniColor2;"
 "void main()\n"
 "{\n"
-"	FragColor = vec4(1.0f,1.0f,0.0f,1.0f);\n"
+"	FragColor = vec4(0.0f,1.0f,uniColor2,1.0f);\n"
 "}\n\0";
 
 // 三角形顶点
@@ -230,12 +232,19 @@ int main()
 
 		// 绘制图形
 		glUseProgram(shaderProgram);
+		int uniColorLocation1 = glGetUniformLocation(shaderProgram, "uniColor1");
+		float time = glfwGetTime();
+		float alpha = (sin(time) / 2.0f) + 0.5f;
+		glUniform4f(uniColorLocation1, 1.0f, alpha, 0.0f, 1.0f);
+
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 		//glBindVertexArray(0);						// 不需要每次都解绑
 
 		glUseProgram(shaderProgramYellow);
+		int uniColorLocation2 = glGetUniformLocation(shaderProgramYellow, "uniColor2");
+		glUniform1f(uniColorLocation2, alpha);
 		glBindVertexArray(VAO[1]);
 		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
