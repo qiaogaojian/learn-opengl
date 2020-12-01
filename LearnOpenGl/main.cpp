@@ -225,8 +225,8 @@ int main()
 		shaderLoader1.setFloat("factor", factor);
 		glm::vec4 vec(1.0f, 1.0f, 1.0f, 1.0f);
 		mat4 trans;
-		trans = translate(trans, vec3(transX, 0.0f, 0.0f));
 		trans = rotate(trans, time, vec3(0.0f, 0.0f, 1.0f));
+		trans = translate(trans, vec3(transX, 0.0f, 0.0f));
 		trans = scale(trans, vec3(scaleXY, scaleXY, scaleXY));
 		shaderLoader1.setMat4("transform", trans);
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
