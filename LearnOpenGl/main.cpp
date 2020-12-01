@@ -42,7 +42,8 @@ unsigned int indices1[] = {
 };
 
 unsigned int indices2[] = {
-	0, 1, 2
+	0, 1, 2,
+	0, 2, 3
 };
 
 float factor = 0.5f;
@@ -97,7 +98,6 @@ int main()
 	glBindVertexArray(VAO[0]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(triVertices), triVertices, GL_STATIC_DRAW);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rectVertices), rectVertices, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]);
@@ -117,7 +117,6 @@ int main()
 	glBindVertexArray(VAO[1]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(triVertices), triVertices, GL_STATIC_DRAW);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(rectVertices), rectVertices, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[1]);
@@ -199,7 +198,13 @@ int main()
 	shaderLoader1.setInt("texture1", 0);
 	shaderLoader1.setInt("texture2", 1);
 	shaderLoader1.setFloat("factor", factor);
+	shaderLoader1.setMat4("transform", mat4());
 
+	shaderLoader2.use();
+	shaderLoader2.setInt("texture1", 0);
+	shaderLoader2.setInt("texture2", 1);
+	shaderLoader2.setFloat("factor", factor);
+	shaderLoader2.setMat4("transform", mat4());
 
 	// 渲染循环
 	//--------------------------------------------------------------------------------------
@@ -216,6 +221,7 @@ int main()
 		float time = glfwGetTime();
 		float transX = sin(time / 3);			// 除以 3 扩大动画周期
 		float scaleXY = 1 - abs(transX) / 2;
+		float alpha = abs(transX);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
@@ -223,18 +229,26 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, texture2);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
 		shaderLoader1.use();
 		shaderLoader1.setFloat("factor", factor);
-		glm::vec4 vec(1.0f, 1.0f, 1.0f, 1.0f);
+
 		mat4 trans;
-		trans = rotate(trans, time, vec3(0.0f, 0.0f, 1.0f));
 		trans = translate(trans, vec3(transX, 0.0f, 0.0f));
+		trans = rotate(trans, time, vec3(0.0f, 0.0f, 1.0f));
 		trans = scale(trans, vec3(scaleXY, scaleXY, scaleXY));
 		shaderLoader1.setMat4("transform", trans);
+
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		//shaderLoader2.use();
-		//glBindVertexArray(VAO[1]);
-		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+		shaderLoader2.use();
+
+		trans = mat4();
+		trans = translate(trans, vec3(-0.5f, 0.5f, 0.0f));
+		trans = scale(trans, vec3(scaleXY, scaleXY, scaleXY));
+		shaderLoader2.setMat4("transform", trans);
+		shaderLoader2.setFloat("factor", alpha);
+
+		glBindVertexArray(VAO[1]);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// 检查并调用事件，交换缓冲
 		glfwPollEvents();			// 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
