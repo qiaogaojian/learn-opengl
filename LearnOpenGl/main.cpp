@@ -214,8 +214,8 @@ int main()
 
 		// 绘制图形
 		float time = glfwGetTime();
-		float transX = sin(time);
-		float scaleXY = 1 - abs(transX);
+		float transX = sin(time / 3);			// 除以 3 扩大动画周期
+		float scaleXY = 1 - abs(transX) / 2;
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
@@ -226,6 +226,7 @@ int main()
 		glm::vec4 vec(1.0f, 1.0f, 1.0f, 1.0f);
 		mat4 trans;
 		trans = translate(trans, vec3(transX, 0.0f, 0.0f));
+		trans = rotate(trans, time, vec3(0.0f, 0.0f, 1.0f));
 		trans = scale(trans, vec3(scaleXY, scaleXY, scaleXY));
 		shaderLoader1.setMat4("transform", trans);
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
