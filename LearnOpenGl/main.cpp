@@ -1,10 +1,14 @@
 ﻿#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "shader_loader.h"
 #include "stb_image.h"
-
 #include <iostream>
 using namespace std;
+using namespace glm;
+
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -204,18 +208,26 @@ int main()
 		// 输入
 		processInput(window);
 
-
 		// 渲染指令
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);	// 设置状态
 		glClear(GL_COLOR_BUFFER_BIT);			// 使用状态
 
 		// 绘制图形
+		float time = glfwGetTime();
+		float transX = sin(time);
+		float scaleXY = 1 - abs(transX);
+
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
 		shaderLoader1.use();
 		shaderLoader1.setFloat("factor", factor);
+		glm::vec4 vec(1.0f, 1.0f, 1.0f, 1.0f);
+		mat4 trans;
+		trans = translate(trans, vec3(transX, 0.0f, 0.0f));
+		trans = scale(trans, vec3(scaleXY, scaleXY, scaleXY));
+		shaderLoader1.setMat4("transform", trans);
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
