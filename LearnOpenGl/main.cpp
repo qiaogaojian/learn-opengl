@@ -265,22 +265,25 @@ int main()
 		shaderLoader.use();
 		shaderLoader.setFloat("factor", factor);
 
-
 		// 坐标系转换 创建变换矩阵
-		mat4 model = mat4(1.0f);
 		mat4 view = mat4(1.0f);
 		mat4 projection = mat4(1.0f);
 
+		view = translate(view, vec3(0.0f, 0.0f, -3.0f));		// Z 轴不为0时需要用 视角空间矩阵处理坐标
 		projection = perspective(radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		view = translate(view, vec3(-0.3f, 0.0f, -3.0f));		// Z 轴不为0时需要用 视角空间矩阵处理坐标
-		model = rotate(model, time, vec3(1.0f, 0.0f, 0.0f));
-
-		shaderLoader.setMat4("model", model);
 		shaderLoader.setMat4("view", view);
 		shaderLoader.setMat4("projection", projection);
 
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		for (int i = 1; i <= 10; i++)
+		{
+			mat4 model = mat4(1.0f);
+			model = translate(model, cubePositions[i - 1]);
+			model = rotate(model, radians(20.0f * i), vec3(1.0f, 0.3f, 0.5f));
+			shaderLoader.setMat4("model", model);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		// 检查并调用事件，交换缓冲
 		glfwPollEvents();			// 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
