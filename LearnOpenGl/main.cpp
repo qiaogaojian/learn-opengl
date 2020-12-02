@@ -105,6 +105,8 @@ unsigned int indices2[] = {
 };
 
 float factor = 0.5f;
+float offsetX = 0.0f;
+float offsetY = 0.0f;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -269,7 +271,7 @@ int main()
 		mat4 view = mat4(1.0f);
 		mat4 projection = mat4(1.0f);
 
-		view = translate(view, vec3(0.0f, 0.0f, -3.0f));		// Z 轴不为0时需要用 视角空间矩阵处理坐标
+		view = translate(view, vec3(offsetX, offsetY, -3.0f));		// Z 轴不为0时需要用 视角空间矩阵处理坐标
 		projection = perspective(radians(90.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		shaderLoader.setMat4("view", view);
 		shaderLoader.setMat4("projection", projection);
@@ -329,5 +331,21 @@ void processInput(GLFWwindow* window) {
 		{
 			factor = 0;
 		}
+	}
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		offsetY += 0.001f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		offsetY -= 0.001f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		offsetX -= 0.001f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		offsetX += 0.001f;
 	}
 }
