@@ -132,7 +132,7 @@ int main()
 
 	// 构建和编译 shader 程序
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	ShaderLoader shaderLoader1("3.3.vs.shader.glsl", "3.3.fs.shader1.glsl", nullptr);
+	ShaderLoader shaderLoader("3.3.vs.shader.glsl", "3.3.fs.shader1.glsl", nullptr);
 
 
 	// 设置顶点数据 配置顶点属性
@@ -147,18 +147,11 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
-	/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices1), indices1, GL_STATIC_DRAW);*/
-
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);					// 位置属性
 	glEnableVertexAttribArray(0);
 
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); // 1 和 shader 中的 (location = 1) 有对应关系 纹理属性  3 * sizeof(float)是偏移量
 	glEnableVertexAttribArray(1);
-
-	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	//glEnableVertexAttribArray(2);
-
 
 
 	// glVertexAttribPointer() 函数把VBO注册到顶点的属性,这里可以安全的解绑
@@ -228,10 +221,10 @@ int main()
 
 	// 设置 shader uniform 变量
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	shaderLoader1.use();
-	shaderLoader1.setInt("texture1", 0);
-	shaderLoader1.setInt("texture2", 1);
-	shaderLoader1.setFloat("factor", factor);
+	shaderLoader.use();
+	shaderLoader.setInt("texture1", 0);
+	shaderLoader.setInt("texture2", 1);
+	shaderLoader.setFloat("factor", factor);
 
 
 	// 渲染循环
@@ -255,8 +248,8 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, texture1);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);  // 所有对GL_TEXTURE_2D的操作都会作用到 texture 对象上
-		shaderLoader1.use();
-		shaderLoader1.setFloat("factor", factor);
+		shaderLoader.use();
+		shaderLoader.setFloat("factor", factor);
 
 
 		// 坐标系转换 创建变换矩阵
@@ -268,9 +261,9 @@ int main()
 		view = translate(view, vec3(-0.3f, 0.0f, -3.0f));		// Z 轴不为0时需要用 视角空间矩阵处理坐标
 		model = rotate(model, time, vec3(1.0f, 0.0f, 0.0f));
 
-		shaderLoader1.setMat4("model", model);
-		shaderLoader1.setMat4("view", view);
-		shaderLoader1.setMat4("projection", projection);
+		shaderLoader.setMat4("model", model);
+		shaderLoader.setMat4("view", view);
+		shaderLoader.setMat4("projection", projection);
 
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
 		glDrawArrays(GL_TRIANGLES, 0, 36);
