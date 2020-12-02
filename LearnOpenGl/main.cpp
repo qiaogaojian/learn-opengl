@@ -146,19 +146,19 @@ int main()
 	glBindVertexArray(VAO[0]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(rectVertices), rectVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices1), indices1, GL_STATIC_DRAW);
+	/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices1), indices1, GL_STATIC_DRAW);*/
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);					// 位置属性
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);					// 位置属性
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))); // 颜色属性  3 * sizeof(float)是偏移量
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); // 1 和 shader 中的 (location = 1) 有对应关系 纹理属性  3 * sizeof(float)是偏移量
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));	// 纹理属性
-	glEnableVertexAttribArray(2);
+	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	//glEnableVertexAttribArray(2);
 
 
 	// 第二个图形
@@ -289,8 +289,9 @@ int main()
 		// 坐标系转换 创建变换矩阵
 		mat4 model = mat4(1.0f);
 		mat4 view = mat4(1.0f);
-		mat4 projection = perspective(radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		mat4 projection = mat4(1.0f);
 
+		projection = perspective(radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		view = translate(view, vec3(-0.3f, 0.0f, -3.0f));		// Z 轴不为0时需要用 视角空间矩阵处理坐标
 		model = rotate(model, time, vec3(1.0f, 0.0f, 0.0f));
 
@@ -299,23 +300,24 @@ int main()
 		shaderLoader1.setMat4("projection", projection);
 
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 
 		shaderLoader2.use();
 
 		model = mat4(1.0f);
 		view = mat4(1.0f);
 
-		view = translate(view, vec3(0.3f, 0.0f, -3.0f));
+		view = translate(view, vec3(0.5f, 0.0f, -3.0f));
 		model = scale(model, vec3(scaleXY, scaleXY, scaleXY));
 
-		shaderLoader1.setMat4("model", model);
-		shaderLoader1.setMat4("view", view);
-		shaderLoader1.setMat4("projection", projection);
+		shaderLoader2.setMat4("model", model);
+		shaderLoader2.setMat4("view", view);
+		shaderLoader2.setMat4("projection", projection);
 
 		shaderLoader2.setFloat("factor", alpha);
 		glBindVertexArray(VAO[1]);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// 检查并调用事件，交换缓冲
 		glfwPollEvents();			// 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
