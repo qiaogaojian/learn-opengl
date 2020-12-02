@@ -270,7 +270,7 @@ int main()
 		mat4 projection = mat4(1.0f);
 
 		view = translate(view, vec3(0.0f, 0.0f, -3.0f));		// Z 轴不为0时需要用 视角空间矩阵处理坐标
-		projection = perspective(radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = perspective(radians(90.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		shaderLoader.setMat4("view", view);
 		shaderLoader.setMat4("projection", projection);
 
