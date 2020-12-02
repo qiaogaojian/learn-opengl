@@ -97,12 +97,14 @@ void processInput(GLFWwindow* window);
 
 int main()
 {
+
 	// 初始化和配置 glfw
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 
 	//创建窗口对象
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -127,10 +129,12 @@ int main()
 		return -1;
 	}
 
+
 	// 构建和编译 shader 程序
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	ShaderLoader shaderLoader1("3.3.vs.shader.glsl", "3.3.fs.shader1.glsl", nullptr);
 	ShaderLoader shaderLoader2("3.3.vs.shader.glsl", "3.3.fs.shader2.glsl", nullptr);
+
 
 	// 设置顶点数据 配置顶点属性
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -182,6 +186,7 @@ int main()
 
 	// 开关绘制线框
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 
 	// 加载和创建材质
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -238,17 +243,23 @@ int main()
 	}
 	stbi_image_free(dataFace);
 
+
+	// 设置 shader uniform 变量
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	shaderLoader1.use();
 	shaderLoader1.setInt("texture1", 0);
 	shaderLoader1.setInt("texture2", 1);
 	shaderLoader1.setFloat("factor", factor);
-	shaderLoader1.setMat4("transform", mat4());
 
 	shaderLoader2.use();
 	shaderLoader2.setInt("texture1", 0);
 	shaderLoader2.setInt("texture2", 1);
 	shaderLoader2.setFloat("factor", factor);
-	shaderLoader2.setMat4("transform", mat4());
+
+	//shaderLoader2.setMat4("model", mat4());
+	//shaderLoader2.setMat4("view", mat4());
+	//shaderLoader2.setMat4("projection", projection);
+
 
 	// 渲染循环
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -274,23 +285,35 @@ int main()
 		shaderLoader1.use();
 		shaderLoader1.setFloat("factor", factor);
 
-		mat4 trans;
-		trans = translate(trans, vec3(transX, 0.0f, 0.0f));
-		trans = rotate(trans, time, vec3(0.0f, 0.0f, 1.0f));
-		trans = scale(trans, vec3(scaleXY, scaleXY, scaleXY));
-		shaderLoader1.setMat4("transform", trans);
+
+		// 坐标系转换 创建变换矩阵
+		mat4 model = mat4(1.0f);
+		mat4 view = mat4(1.0f);
+		mat4 projection = perspective(radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+		view = translate(view, vec3(-0.3f, 0.0f, -3.0f));		// Z 轴不为0时需要用 视角空间矩阵处理坐标
+		model = rotate(model, time, vec3(1.0f, 0.0f, 0.0f));
+
+		shaderLoader1.setMat4("model", model);
+		shaderLoader1.setMat4("view", view);
+		shaderLoader1.setMat4("projection", projection);
 
 		glBindVertexArray(VAO[0]);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		shaderLoader2.use();
 
-		trans = mat4();
-		trans = translate(trans, vec3(-0.5f, 0.5f, 0.0f));
-		trans = scale(trans, vec3(scaleXY, scaleXY, scaleXY));
-		shaderLoader2.setMat4("transform", trans);
-		shaderLoader2.setFloat("factor", alpha);
+		model = mat4(1.0f);
+		view = mat4(1.0f);
 
+		view = translate(view, vec3(0.3f, 0.0f, -3.0f));
+		model = scale(model, vec3(scaleXY, scaleXY, scaleXY));
+
+		shaderLoader1.setMat4("model", model);
+		shaderLoader1.setMat4("view", view);
+		shaderLoader1.setMat4("projection", projection);
+
+		shaderLoader2.setFloat("factor", alpha);
 		glBindVertexArray(VAO[1]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -298,6 +321,7 @@ int main()
 		glfwPollEvents();			// 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
 		glfwSwapBuffers(window);	// 双缓冲交换颜色缓冲（它是一个储存着GLFW窗口每一个像素颜色值的大缓冲），它在这一迭代中被用来绘制，并且将会作为输出显示在屏幕上
 	}
+
 
 	// 释放资源
 	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
