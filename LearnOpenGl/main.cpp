@@ -281,9 +281,12 @@ int main()
 		{
 			mat4 model = mat4(1.0f);
 			model = translate(model, cubePositions[i - 1]);
-			model = rotate(model, radians(20.0f * i), vec3(1.0f, 0.3f, 0.5f));
+			if (i % 3 == 1)
+			{
+				model = rotate(model, radians(20.0f * i), vec3(1.0f, 0.3f, 0.5f));
+				model = rotate(model, time, vec3(1.0f, 0.3f, 0.5f));
+			}
 			shaderLoader.setMat4("model", model);
-
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
