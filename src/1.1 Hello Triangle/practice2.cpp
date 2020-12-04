@@ -23,10 +23,21 @@ const char *fragmentShaderSource =
     "	FragColor = vec4(1.0f,0.5f,0.2f,1.0f);\n"
     "}\n\0";
 
-float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f};
+float vertices[] =
+{
+    // 第一个三角形
+     -0.5f, -0.5f,  0.0f,
+    -0.5f,  0.5f,  0.0f,
+     0.0f,  0.0f,  0.0f
+};
+
+float vertices2[] =
+{
+    // 第二个三角形
+     0.5f, -0.5f,  0.0f,
+     0.5f,  0.5f,  0.0f,
+     0.0f,  0.0f,  0.0f
+};
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -113,6 +124,8 @@ int main()
 
     // 设置顶点数据 配置顶点属性
     //--------------------------------------------------------------------------------------
+
+    // 第一个三角形
     unsigned int VAO;
     unsigned int VBO;
     // 生成 VAO VBO
@@ -133,6 +146,22 @@ int main()
     // 开关绘制线框
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    // 第二个三角形
+    unsigned int VAO2;
+    unsigned int VBO2;
+    glGenVertexArrays(1,&VAO2);
+    glGenBuffers(1,&VBO2);
+
+    glBindVertexArray(VAO2);
+    glBindBuffer(GL_ARRAY_BUFFER,VBO2);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(vertices2),vertices2,GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
+
     while (!glfwWindowShouldClose(window))
     {
         // 处理输入
@@ -143,7 +172,12 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);         // 使用状态
 
         glUseProgram(shaderProgram);
+
         glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(0);
+
+        glBindVertexArray(VAO2);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
 
