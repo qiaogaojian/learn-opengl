@@ -17,6 +17,7 @@
           "-I\"${workspaceRoot}\\include\\glad\\include\"",
           "-I\"${workspaceRoot}\\include\\glfw-3.3.2.bin.WIN32\\include\"",
           "-I\"${workspaceRoot}\\include\\glm-0.9.8.0\"",
+          "-I\"${workspaceRoot}\\include\\utils\"",
 
           "-L\"${workspaceRoot}\\include\\glad\\lib\"",
           "-L\"${workspaceRoot}\\include\\glfw-3.3.2.bin.WIN32\\lib-mingw\"",

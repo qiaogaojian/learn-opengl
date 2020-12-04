@@ -7,6 +7,7 @@
       "cppStandard": "c++17",
       "includePath": [
         "${workspaceFolder}/**",
+        "${workspaceRoot}\\include\\utils",
         "D:\\Opengl\\glm-0.9.8.0\\glm",
         "D:\\Opengl\\glad\\include",
         "D:\\Opengl\\glew-2.1.0\\include",
