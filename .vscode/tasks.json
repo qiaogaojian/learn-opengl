@@ -13,40 +13,19 @@
           "\"${file}\"",
           "-o",
           "\"${fileDirname}\\${fileBasenameNoExtension}.exe\"",
-          "-I",
-          "-I\"D:\\Opengl\\glm-0.9.8.0\\glm\"",
-          "-I\"D:\\Opengl\\glad\\include\"",
-          "-I\"D:\\Opengl\\glew-2.1.0\\include\"",
-          "-I\"D:\\Opengl\\glfw-3.3.2.bin.WIN32\\include\"",
-          "-I\"D:\\Opengl\\glfw-3.3.2.bin.WIN32\\lib-vc2015\"",
-          "-I\"D:\\Opengl\\glew-2.1.0\\lib\\Release\\Win32\"",
-          //   "-L\"D:\\Opengl\\glfw-3.3.2.bin.WIN32\\lib-vc2015\"",
-          "-L\"D:\\Opengl\\glfw-3.3.2.bin.WIN32\\lib-mingw\"",
-          "-L\"D:\\Opengl\\Mingw32\\mingw32\\i686-w64-mingw32\\lib\"",
-          "-L\"D:\\Opengl\\glew-2.1.0\\lib\\Release\\Win32\"",
-          "-L\"D:\\Gitee\\OpenGl\\OpenglCode\\include\"",
+
+          "-I\"${workspaceRoot}\\include\\glad\\include\"",
+          "-I\"${workspaceRoot}\\include\\glfw-3.3.2.bin.WIN32\\include\"",
+          "-I\"${workspaceRoot}\\include\\glm-0.9.8.0\"",
+
+          "-L\"${workspaceRoot}\\include\\glad\\lib\"",
+          "-L\"${workspaceRoot}\\include\\glfw-3.3.2.bin.WIN32\\lib-mingw\"",
+          "-L\"${workspaceRoot}\\include\\mingw32\"",
+
           "-lglfw3",
           "-lgdi32",
           "-lopengl32",
-          "-lglew32s",
-          "-lglad",
-        //   "-lmingw32 ",
-        //   "-lSDL2main ",
-        //   "-lSDL2 ",
-        //   "-lm ",
-        //   "-ldinput8 ",
-        //   "-ldxguid ",
-        //   "-ldxerr8 ",
-        //   "-luser32 ",
-        //   "-lgdi32 ",
-        //   "-lwinmm ",
-        //   "-limm32 ",
-        //   "-lole32 ",
-        //   "-loleaut32 ",
-        //   "-lshell32 ",
-        //   "-lversion ",
-          "-luuid"
-
+          "-lglad"
           // 设置编译后的可执行文件的字符集为 GB2312：
           // "-fexec-charset", "GB2312"
           // 直接设置命令行字符集为 utf-8：
