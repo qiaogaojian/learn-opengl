@@ -7,6 +7,27 @@ using namespace std;
 const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
 
+const char *vertexShaderSource =
+    "#version 330 core\n"
+    "layout(location = 0) in vec3 aPos;\n"
+    "void main()\n"
+    "{\n"
+    "	gl_Position = vec4(aPos.x,aPos.y,aPos.z,1.0);\n"
+    "}\0";
+
+const char *fragmentShaderSource =
+    "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+    "	FragColor = vec4(1.0f,0.5f,0.2f,1.0f);\n"
+    "}\n\0";
+
+float vertices[] = {
+    -0.5f, -0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f};
+
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -39,6 +60,56 @@ int main()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+
+    // 构建和编译 shader 程序
+    //--------------------------------------------------------------------------------------
+
+    // 顶点shader
+    int vertexShader = glCreateShader(GL_VERTEX_SHADER);        // 创建shader
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL); // 设置源代码
+    glCompileShader(vertexShader);                              // 编译shader
+    // 检查 顶点shader 编译错误
+    int success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        cout << "错误::顶点Shader::编译错误\n"
+             << infoLog << endl;
+    }
+
+    // 片元 shader
+    int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+    // 检查 片元shader 编译错误
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        cout << "错误::片元Shader::编译错误\n"
+             << infoLog << endl;
+    }
+
+    // 链接 shader
+    int shaderProgram = glCreateProgram();         // 创建 shader 程序
+    glAttachShader(shaderProgram, vertexShader);   // 设置顶点shader
+    glAttachShader(shaderProgram, fragmentShader); // 设置片元shader
+    glLinkProgram(shaderProgram);                  // 链接 shader 程序
+
+    // 检查链接错误
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        cout << "错误::Shader::程序::链接失败\n"
+             << infoLog << endl;
+    }
+
+    // 链接后释放已经不需要的 shader
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
 
     while (!glfwWindowShouldClose(window))
     {
