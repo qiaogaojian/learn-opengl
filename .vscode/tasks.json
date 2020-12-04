@@ -10,23 +10,27 @@
         "command": "g++",
         "args": [
           "-g",
+          // 编译源代码
           "\"${file}\"",
-          "-o",
-          "\"${workspaceRoot}\\build\\${fileBasenameNoExtension}.exe\"",
-
-          "-I\"${workspaceRoot}\\include\\glad\\include\"",
-          "-I\"${workspaceRoot}\\include\\glfw-3.3.2.bin.WIN32\\include\"",
-          "-I\"${workspaceRoot}\\include\\glm-0.9.8.0\"",
-          "-I\"${workspaceRoot}\\include\\utils\"",
-
-          "-L\"${workspaceRoot}\\include\\glad\\lib\"",
-          "-L\"${workspaceRoot}\\include\\glfw-3.3.2.bin.WIN32\\lib-mingw\"",
-          "-L\"${workspaceRoot}\\include\\mingw32\"",
-
+          "\"${workspaceFolder}/include/utils/shader_loader.cpp\"",
+          // include目录
+          "-I\"${workspaceRoot}/include/glad/include\"",
+          "-I\"${workspaceRoot}/include/glfw-3.3.2.bin.WIN32/include\"",
+          "-I\"${workspaceRoot}/include/glm-0.9.8.0\"",
+          "-I\"${workspaceRoot}/include/utils\"",
+          // 链接库目录
+          "-L\"${workspaceRoot}/include/glad/lib\"",
+          "-L\"${workspaceRoot}/include/glfw-3.3.2.bin.WIN32/lib-mingw\"",
+          "-L\"${workspaceRoot}/include/mingw32\"",
+          // 链接静态库
           "-lglfw3",
           "-lgdi32",
           "-lopengl32",
-          "-lglad"
+          "-lglad",
+
+          "-o",
+          "\"${workspaceRoot}/build/${fileBasenameNoExtension}.exe\""
+
           // 设置编译后的可执行文件的字符集为 GB2312：
           // "-fexec-charset", "GB2312"
           // 直接设置命令行字符集为 utf-8：
@@ -64,7 +68,7 @@
         // 在输出中匹配问题的实际模式。
         "pattern": {
           // The regular expression.
-          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+          "regexp": "^(.*):(/d+):(/d+):/s+(warning|error):/s+(.*)$",
           // 第一个匹配组匹配文件的相对文件名：
           "file": 1,
           // 第二个匹配组匹配问题出现的行：

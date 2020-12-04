@@ -7,11 +7,11 @@
       "cppStandard": "c++17",
       "includePath": [
         "${workspaceFolder}/**",
-        "${workspaceRoot}/include/utils",
-        "D:/Opengl/glm-0.9.8.0/glm",
-        "D:/Opengl/glad/include",
-        "D:/Opengl/glfw-3.3.2.bin.WIN32/include",
-        "D:/Opengl/glfw-3.3.2.bin.WIN32/lib-vc2015",
+        "${workspaceFolder}/include/utils",
+        "${workspaceFolder}/include/glm-0.9.8.0/glm",
+        "${workspaceFolder}/include/glad/include",
+        "${workspaceFolder}/include/glfw-3.3.2.bin.WIN32/include",
+        "${workspaceFolder}/include/glfw-3.3.2.bin.WIN32/lib-vc2015",
         "D:/Opengl/Mingw32/mingw32/i686-w64-mingw32/include",
         "D:/Opengl/Mingw32/mingw32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++",
         "D:/Opengl/Mingw32/mingw32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/*"
@@ -20,6 +20,11 @@
       "browse": {
         "path": [
           "${workspaceFolder}/**",
+          "${workspaceFolder}/include/utils",
+          "${workspaceFolder}/include/glm-0.9.8.0/glm",
+          "${workspaceFolder}/include/glad/include",
+          "${workspaceFolder}/include/glfw-3.3.2.bin.WIN32/include",
+          "${workspaceFolder}/include/glfw-3.3.2.bin.WIN32/lib-vc2015",
           "D:/Opengl/Mingw32/mingw32/i686-w64-mingw32/include",
           "D:/Opengl/Mingw32/mingw32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++",
           "D:/Opengl/Mingw32/mingw32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/*"
