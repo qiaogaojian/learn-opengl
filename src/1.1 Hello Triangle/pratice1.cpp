@@ -23,10 +23,17 @@ const char *fragmentShaderSource =
     "	FragColor = vec4(1.0f,0.5f,0.2f,1.0f);\n"
     "}\n\0";
 
-float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f};
+float vertices[] =
+{
+    // 第一个三角形
+     -0.5f, -0.5f,  0.0f,
+    -0.5f,  0.5f,  0.0f,
+     0.0f,  0.0f,  0.0f,
+    // 第二个三角形
+     0.5f, -0.5f,  0.0f,
+     0.5f,  0.5f,  0.0f,
+     0.0f,  0.0f,  0.0f
+};
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -145,6 +152,7 @@ int main()
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 3, 3);
         glBindVertexArray(0);
 
         // 检查并调用事件，交换缓冲完成绘制
