@@ -1,6 +1,7 @@
 {
   "files.encoding": "gb2312",
   "files.associations": {
-    "cstdio": "cpp"
-  }
+    "cstdio": "cpp",
+    "fstream": "cpp"
+}
 }
