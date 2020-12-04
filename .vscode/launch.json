@@ -7,7 +7,7 @@
       "preLaunchTask": "Compile", // 调试会话开始前要运行的任务。
       "type": "cppdbg", // 设置要使用的基础调试器。使用 GDB 或 LLDB 时必须是 cppdbg 。
       "request": "launch", // 设置启动程序还是附加到已经运行的实例。启动或附加 ( launch | attach ).
-      "program": "${fileDirname}/${fileBasenameNoExtension}.exe", // 调试器将启动或附加的可执行文件的完整路径。
+      "program": "${workspaceRoot}\\build\\${fileBasenameNoExtension}.exe", // 调试器将启动或附加的可执行文件的完整路径。
       "externalConsole": true, // 设置是否显示外部控制台。
       "logging": {
         // 用于确定应该将哪些类型的消息记录到调试控制台。
