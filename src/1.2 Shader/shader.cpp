@@ -1,8 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 #include <iostream>
 using namespace std;
+using namespace glm;
 
 const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
@@ -18,9 +20,10 @@ const char *vertexShaderSource =
 const char *fragmentShaderSource =
     "#version 330 core\n"
     "out vec4 FragColor;\n"
+    "uniform vec4 ourColor;"
     "void main()\n"
     "{\n"
-    "	FragColor = vec4(1.0f,0.5f,0.2f,1.0f);\n"
+    "	FragColor = ourColor;\n"
     "}\n\0";
 
 float vertices[] = {
@@ -138,11 +141,17 @@ int main()
         // 处理输入
         processInput(window);
 
+        // 时间变量
+        float timeValue = glfwGetTime();
+
         //处理渲染
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // 设置状态
         glClear(GL_COLOR_BUFFER_BIT);         // 使用状态
 
         glUseProgram(shaderProgram);
+        float greenValue = (sin(timeValue)+1.0f)/2.0f;
+        int vertextColorLocation = glGetUniformLocation(shaderProgram,"ourColor");
+        glUniform4f(vertextColorLocation,0.0f,greenValue,0.0f,1.0f);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
