@@ -31,4 +31,4 @@
 *.out
 *.app
 
-!mingw-w64-install.exe
+!include
