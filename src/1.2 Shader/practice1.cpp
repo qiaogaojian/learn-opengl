@@ -1,6 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "shader_loader.h"
+
+#include <direct.h>
 #include <iostream>
 using namespace std;
 
@@ -45,9 +47,11 @@ int main()
         return -1;
     }
 
-    // 构建和编译 shader 程序
+    // 构建和编译 shader 程序  D:\Gitee\LearnOpengl\src\1.2 Shader
     //--------------------------------------------------------------------------------------
-    ShaderLoader shaderLoader("D:/Gitee/LearnOpengl/src/1.2 Shader/1.2.vs.glsl", "D:/Gitee/LearnOpengl/src/1.2 Shader/1.2.fs.glsl", nullptr);
+    char *vsPath = "/src/1.2 Shader/1.2.vs.glsl";
+    char *fsPath = "/src/1.2 Shader/1.2.fs.glsl";
+    ShaderLoader shaderLoader(vsPath, fsPath, nullptr);
 
     // 设置顶点数据 配置顶点属性
     //--------------------------------------------------------------------------------------
