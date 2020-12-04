@@ -1,0 +1,34 @@
+{
+  "configurations": [
+    {
+      "name": "Win32",
+      "compilerPath": "D:/Opengl/Mingw32/mingw32/bin/g++.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "D:\\Opengl\\glm-0.9.8.0\\glm",
+        "D:\\Opengl\\glad\\include",
+        "D:\\Opengl\\glew-2.1.0\\include",
+        "D:\\Opengl\\glfw-3.3.2.bin.WIN32\\include",
+        "D:\\Opengl\\glfw-3.3.2.bin.WIN32\\lib-vc2015",
+        "D:\\Opengl\\glew-2.1.0\\lib\\Release\\Win32",
+        "D:\\Opengl\\Mingw32\\mingw32\\i686-w64-mingw32\\include",
+        "D:\\Opengl\\Mingw32\\mingw32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++",
+        "D:\\Opengl\\Mingw32\\mingw32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++\\*"
+      ],
+      "defines": ["_DEBUG", "UNICODE", "_UNICODE", "__GNUC__=7"],
+      "browse": {
+        "path": [
+          "${workspaceFolder}/**",
+          "D:\\Opengl\\Mingw32\\mingw32\\i686-w64-mingw32\\include",
+          "D:\\Opengl\\Mingw32\\mingw32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++",
+          "D:\\Opengl\\Mingw32\\mingw32\\lib\\gcc\\i686-w64-mingw32\\8.1.0\\include\\c++\\*"
+        ],
+        "limitSymbolsToIncludedHeaders": true,
+        "databaseFilename": ""
+      }
+    }
+  ],
+  "version": 4
+}
