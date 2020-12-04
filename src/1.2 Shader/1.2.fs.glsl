@@ -1,6 +1,6 @@
-version 330 core
+#version 330 core
 
-out vec FragColor;
+out vec4 FragColor;
 
 void main()
 {

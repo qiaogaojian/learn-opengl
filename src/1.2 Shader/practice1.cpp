@@ -8,9 +8,9 @@ const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
 
 float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f};
+    0.5f, 0.5f, 0.0f,
+    -0.5f, 0.5f, 0.0f,
+    0.0f, -0.5f, 0.0f};
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -47,7 +47,7 @@ int main()
 
     // 构建和编译 shader 程序
     //--------------------------------------------------------------------------------------
-    ShaderLoader shaderLoader("1.2.vs.glsl", "1.2.fs.glsl", nullptr);
+    ShaderLoader shaderLoader("D:/Gitee/LearnOpengl/src/1.2 Shader/1.2.vs.glsl", "D:/Gitee/LearnOpengl/src/1.2 Shader/1.2.fs.glsl", nullptr);
 
     // 设置顶点数据 配置顶点属性
     //--------------------------------------------------------------------------------------
