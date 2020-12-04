@@ -111,6 +111,28 @@ int main()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
+    // 设置顶点数据 配置顶点属性
+    //--------------------------------------------------------------------------------------
+    unsigned int VAO;
+    unsigned int VBO;
+    // 生成 VAO VBO
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    // 首先绑定VAO
+    glBindVertexArray(VAO);
+    // 然后绑定并设置VBO
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    // 然后设置顶点属性
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+    // 已经把VBO注册到顶点属性,这里可以安全的解绑
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // 这里可以解绑 VAO 防止别的 VAO 调用修改这个 VAO, 但这种情况一般不会发生,因为修改 VAO 需要调用 glBindVertexArray(), 如果不是必须的一般不解绑 VAO 或 VBO
+    glBindVertexArray(0);
+    // 开关绘制线框
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     while (!glfwWindowShouldClose(window))
     {
         // 处理输入
@@ -120,12 +142,21 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // 设置状态
         glClear(GL_COLOR_BUFFER_BIT);         // 使用状态
 
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(0);
+
         // 检查并调用事件，交换缓冲完成绘制
         glfwPollEvents();        // 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
         glfwSwapBuffers(window); // 双缓冲交换颜色缓冲（它是一个储存着GLFW窗口每一个像素颜色值的大缓冲），它在这一迭代中被用来绘制，并且将会作为输出显示在屏幕上
     }
 
-    glfwTerminate();
+    // 释放资源
+    //--------------------------------------------------------------------------------------
+
+    // 释放GLFW资源
+    glfwTerminate(); // 当渲染循环结束后我们需要正确释放/删除之前的分配的所有资源 这样便能清理所有的资源并正确地退出应用程序
     return 0;
 }
 
