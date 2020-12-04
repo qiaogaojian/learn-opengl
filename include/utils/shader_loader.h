@@ -34,6 +34,10 @@ public:
 	void setMat3(const string& name, const mat3& mat) const;
 	void setMat4(const string& name, const mat4& mat) const;
 
+    // concat string
+    string concatString(char* s1,const char* s2);
+    string subreplace(string resource_str, string sub_str, string new_str);
+
 private:
 	// ºÏ≤Èshader ±‡“Î ¡¥Ω”¥ÌŒÛ
 	void checkCompileErrors(GLuint shader, string type);

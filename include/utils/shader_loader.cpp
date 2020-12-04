@@ -1,5 +1,5 @@
 #include "shader_loader.h"
-
+#include <direct.h>
 ShaderLoader::ShaderLoader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
 	string vertexShaderCode;
 	string fragmentShaderCode;
@@ -13,8 +13,10 @@ ShaderLoader::ShaderLoader(const char* vertexPath, const char* fragmentPath, con
 	gShaderFile.exceptions(ifstream::failbit | ifstream::badbit);
 	try
 	{
-		vShaderFile.open(vertexPath);
-		fShaderFile.open(fragmentPath);
+        string vPath = concatString(getcwd(NULL, 0),vertexPath);
+        string fPath = concatString(getcwd(NULL, 0),fragmentPath);
+		vShaderFile.open(vPath);
+		fShaderFile.open(fPath);
 		stringstream vShaderStream;
 		stringstream fShaderStream;
 		vShaderStream << vShaderFile.rdbuf();
@@ -153,4 +155,19 @@ void  ShaderLoader::checkCompileErrors(GLuint shader, string type) {
 			cout << "错误::Shader程序链接错误::Type:" << type << endl << infoLog << endl << "-- --------------------------------------------------- --" << endl;
 		}
 	}
+}
+
+string ShaderLoader:: concatString(char* s1, const char* s2){
+    string temp = subreplace(string(s1 ),"\\","/") + string(s2) + "\0";
+    return temp;
+}
+
+string ShaderLoader:: subreplace(string resource_str, string sub_str, string new_str)
+{
+    string::size_type pos = 0;
+    while((pos = resource_str.find(sub_str)) != string::npos)   //替换所有指定子串
+    {
+        resource_str.replace(pos, sub_str.length(), new_str);
+    }
+    return resource_str;
 }
