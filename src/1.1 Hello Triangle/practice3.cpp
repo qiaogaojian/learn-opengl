@@ -23,6 +23,14 @@ const char *fragmentShaderSource =
     "	FragColor = vec4(1.0f,0.5f,0.2f,1.0f);\n"
     "}\n\0";
 
+const char *fragmentShaderSource2 =
+    "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+    "	FragColor = vec4(1.0f,1.0f,0.2f,1.0f);\n"
+    "}\n\0";
+
 float vertices[] =
 {
     // 第一个三角形
@@ -103,11 +111,27 @@ int main()
              << infoLog << endl;
     }
 
+    int fragmentShader2 = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader2, 1, &fragmentShaderSource2, NULL);
+    glCompileShader(fragmentShader2);
+    // 检查 片元shader 编译错误
+    glGetShaderiv(fragmentShader2, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(fragmentShader2, 512, NULL, infoLog);
+        cout << "错误::片元Shader::编译错误\n"
+             << infoLog << endl;
+    }
+
     // 链接 shader
     int shaderProgram = glCreateProgram();         // 创建 shader 程序
+    int shaderProgram2 = glCreateProgram();         // 创建 shader 程序
     glAttachShader(shaderProgram, vertexShader);   // 设置顶点shader
+    glAttachShader(shaderProgram2, vertexShader);   // 设置顶点shader
     glAttachShader(shaderProgram, fragmentShader); // 设置片元shader
+    glAttachShader(shaderProgram2, fragmentShader2); // 设置片元shader
     glLinkProgram(shaderProgram);                  // 链接 shader 程序
+    glLinkProgram(shaderProgram2);                  // 链接 shader 程序
 
     // 检查链接错误
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
@@ -154,10 +178,10 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);         // 使用状态
 
         glUseProgram(shaderProgram);
-
         glBindVertexArray(VAO[0]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
+        glUseProgram(shaderProgram2);
         glBindVertexArray(VAO[1]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
