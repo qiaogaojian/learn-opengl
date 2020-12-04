@@ -47,7 +47,7 @@ int main()
         return -1;
     }
 
-    // 构建和编译 shader 程序  D:\Gitee\LearnOpengl\src\1.2 Shader
+    // 构建和编译 shader 程序
     //--------------------------------------------------------------------------------------
     char *vsPath = "/src/1.2 Shader/1.2.vs.glsl";
     char *fsPath = "/src/1.2 Shader/1.2.fs.glsl";
