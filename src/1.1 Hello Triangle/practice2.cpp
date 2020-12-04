@@ -125,42 +125,24 @@ int main()
     // 设置顶点数据 配置顶点属性
     //--------------------------------------------------------------------------------------
 
-    // 第一个三角形
-    unsigned int VAO;
-    unsigned int VBO;
-    // 生成 VAO VBO
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    // 首先绑定VAO
-    glBindVertexArray(VAO);
-    // 然后绑定并设置VBO
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    unsigned int VAO[2];
+    unsigned int VBO[2];
+
+    glGenVertexArrays(2, VAO);
+    glGenBuffers(2, VBO);
+    // 设置第一个三角形数据
+    glBindVertexArray(VAO[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    // 然后设置顶点属性
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
-    // 已经把VBO注册到顶点属性,这里可以安全的解绑
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    // 这里可以解绑 VAO 防止别的 VAO 调用修改这个 VAO, 但这种情况一般不会发生,因为修改 VAO 需要调用 glBindVertexArray(), 如果不是必须的一般不解绑 VAO 或 VBO
-    glBindVertexArray(0);
-    // 开关绘制线框
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-    // 第二个三角形
-    unsigned int VAO2;
-    unsigned int VBO2;
-    glGenVertexArrays(1,&VAO2);
-    glGenBuffers(1,&VBO2);
-
-    glBindVertexArray(VAO2);
-    glBindBuffer(GL_ARRAY_BUFFER,VBO2);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(vertices2),vertices2,GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);
+    // 设置第二个三角形数据
+    glBindVertexArray(VAO[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER,0);
-    glBindVertexArray(0);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -173,13 +155,11 @@ int main()
 
         glUseProgram(shaderProgram);
 
-        glBindVertexArray(VAO);
+        glBindVertexArray(VAO[0]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
-        glBindVertexArray(0);
 
-        glBindVertexArray(VAO2);
+        glBindVertexArray(VAO[1]);
         glDrawArrays(GL_TRIANGLES, 0, 3);
-        glBindVertexArray(0);
 
         // 检查并调用事件，交换缓冲完成绘制
         glfwPollEvents();        // 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
