@@ -12,24 +12,30 @@ const unsigned int SCR_HEIGHT = 600; // 屏幕高度
 const char *vertexShaderSource =
     "#version 330 core\n"
     "layout(location = 0) in vec3 aPos;\n"
+    "layout(location = 1) in vec3 aColor;\n"
+    "out vec3 ourColor;"
     "void main()\n"
     "{\n"
     "	gl_Position = vec4(aPos.x,aPos.y,aPos.z,1.0);\n"
+    "   ourColor = aColor;"
     "}\0";
 
 const char *fragmentShaderSource =
     "#version 330 core\n"
+    "in vec3 ourColor;"
     "out vec4 FragColor;\n"
-    "uniform vec4 ourColor;"
+    "uniform float green;"
     "void main()\n"
     "{\n"
-    "	FragColor = ourColor;\n"
+    "	FragColor = vec4(ourColor.x,green,ourColor.z,1.0);\n"
     "}\n\0";
 
 float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f};
+    // 顶点坐标              // 顶点颜色
+    -0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f,
+     0.5f, -0.5f, 0.0f,     0.0f, 1.0f, 0.0f,
+     0.0f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f
+};
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -127,8 +133,13 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     // 然后设置顶点属性
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    // 顶点属性
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
+    // 颜色属性
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
+
     // 已经把VBO注册到顶点属性,这里可以安全的解绑
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     // 这里可以解绑 VAO 防止别的 VAO 调用修改这个 VAO, 但这种情况一般不会发生,因为修改 VAO 需要调用 glBindVertexArray(), 如果不是必须的一般不解绑 VAO 或 VBO
@@ -150,10 +161,10 @@ int main()
 
         glUseProgram(shaderProgram);
         float greenValue = (sin(timeValue)+1.0f)/2.0f;
-        int vertextColorLocation = glGetUniformLocation(shaderProgram,"ourColor");
-        glUniform4f(vertextColorLocation,0.0f,greenValue,0.0f,1.0f);
+        int vertextColorLocation = glGetUniformLocation(shaderProgram,"green");
+        glUniform1f(vertextColorLocation,greenValue);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
 
         // 检查并调用事件，交换缓冲完成绘制
