@@ -103,6 +103,7 @@ int main()
     int width;
     int height;
     int nrChannels;
+    stbi_set_flip_vertically_on_load(true); // OpenGL要求y轴0.0坐标是在图片的底部的，但是图片的y轴0.0坐标通常在顶部,这里进行上下翻转
     string texPath = shaderLoader.concatString(getcwd(NULL, 0), "/res/texture/box.jpg");
     unsigned char *data = stbi_load(texPath.c_str(), &width, &height, &nrChannels, 0);
     if (data)
