@@ -14,6 +14,8 @@ float vertices[] = {
     -0.5f, 0.5f, 0.0f,
     0.0f, -0.5f, 0.0f};
 
+float offsetX = 0;
+
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -69,10 +71,10 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
 
-    shaderLoader.use();                             // shaderLoader.use()之后设置
+    shaderLoader.use(); // shaderLoader.use()之后设置
     vec4 colorC = vec4(0.68f, 0.51f, 1.0f, 1.0f);
-    shaderLoader.setVec4("colorC", colorC);         // uniform 在 while 循环之前和循环中都要设置
-
+    shaderLoader.setVec4("colorC", colorC); // uniform 在 while 循环之前和循环中都要设置
+    shaderLoader.setFloat("posX", offsetX);
     while (!glfwWindowShouldClose(window))
     {
         // 处理输入
@@ -83,6 +85,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);         // 使用状态
 
         shaderLoader.use();
+        shaderLoader.setFloat("offsetX", offsetX);
+        cout << "offsetX:" << offsetX << endl;
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -111,5 +115,23 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        offsetX -= 0.001f;
+        if (offsetX <= -1)
+        {
+            offsetX = -1;
+        }
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        offsetX += 0.001f;
+        if (offsetX >= 1)
+        {
+            offsetX = 1;
+        }
     }
 }
