@@ -90,6 +90,7 @@ int main()
 
     // 加载材质
     //--------------------------------------------------------------------------------------
+    // 第一个材质
     unsigned int texture1;
     glGenTextures(1, &texture1);
     glBindTexture(GL_TEXTURE_2D, texture1);
@@ -115,6 +116,35 @@ int main()
     }
     stbi_image_free(data);
 
+    // 第二个材质
+    unsigned int texture2;
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    // 为当前绑定的纹理对象设置环绕 过滤方式
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // 加载并生成纹理
+
+    texPath = shaderLoader.concatString(getcwd(NULL, 0), "/res/texture/smile.png");
+    data = stbi_load(texPath.c_str(), &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        // 注意这里的材质是透明的 有Alpha通道 要用GL_RGBA格式
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        cout << "材质加载失败" << endl;
+    }
+    stbi_image_free(data);
+
+    shaderLoader.use();
+    shaderLoader.setInt("texture1", 0);
+    shaderLoader.setInt("texture2", 1);
+
     while (!glfwWindowShouldClose(window))
     {
         // 处理输入
@@ -124,7 +154,10 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // 设置状态
         glClear(GL_COLOR_BUFFER_BIT);         // 使用状态
 
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
 
         shaderLoader.use();
         glBindVertexArray(VAO);
