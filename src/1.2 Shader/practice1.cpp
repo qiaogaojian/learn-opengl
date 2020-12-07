@@ -69,6 +69,10 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
 
+    shaderLoader.use();                             // shaderLoader.use()之后设置
+    vec4 colorC = vec4(0.68f, 0.51f, 1.0f, 1.0f);
+    shaderLoader.setVec4("colorC", colorC);         // uniform 在 while 循环之前和循环中都要设置
+
     while (!glfwWindowShouldClose(window))
     {
         // 处理输入
