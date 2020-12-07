@@ -23,6 +23,8 @@ unsigned int indices[] = {
     1, 2, 3  // second triangle
 };
 
+float alpha = 0.5f;
+
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -145,6 +147,7 @@ int main()
     shaderLoader.use();
     shaderLoader.setInt("texture1", 0);
     shaderLoader.setInt("texture2", 1);
+    shaderLoader.setFloat("alpha", alpha);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -161,6 +164,7 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         shaderLoader.use();
+        shaderLoader.setFloat("alpha", alpha);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -193,5 +197,21 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        alpha += 0.01;
+        if (alpha >= 1)
+        {
+            alpha = 1;
+        }
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        alpha -= 0.01;
+        if (alpha <= 0)
+        {
+            alpha = 0;
+        }
     }
 }
