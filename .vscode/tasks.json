@@ -13,6 +13,7 @@
           // 编译源代码
           "\"${file}\"",
           "\"${workspaceFolder}/include/utils/shader_loader.cpp\"",
+          "\"${workspaceFolder}/include/utils/stb_image.cpp\"",
           // include目录
           "-I\"${workspaceRoot}/include/glad/include\"",
           "-I\"${workspaceRoot}/include/glfw-3.3.2.bin.WIN32/include\"",
