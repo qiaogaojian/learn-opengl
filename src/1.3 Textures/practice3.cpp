@@ -12,10 +12,10 @@ const unsigned int SCR_HEIGHT = 600; // 屏幕高度
 
 float vertices[] = {
     //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-    0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // 右上
-    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // 右下
-    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // 左下
-    -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // 左上
+    0.5f,  0.5f, 0.0f,        1.0f, 0.0f, 0.0f,   0.6f, 0.6f,  // 右上
+    0.5f, -0.5f, 0.0f,        0.0f, 1.0f, 0.0f,   0.6f, 0.5f,  // 右下
+   -0.5f, -0.5f, 0.0f,        0.0f, 0.0f, 1.0f,   0.5f, 0.5f,  // 左下
+   -0.5f,  0.5f, 0.0f,        1.0f, 1.0f, 0.0f,   0.5f, 0.6f   // 左上
 };
 
 unsigned int indices[] = {
@@ -97,8 +97,8 @@ int main()
     // 为当前绑定的纹理对象设置环绕 过滤方式
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // 加载并生成纹理
     int width;
     int height;
