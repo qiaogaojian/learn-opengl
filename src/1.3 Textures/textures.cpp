@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "shader_loader.h"
+#include "stb_image.h"
 
 #include <direct.h>
 #include <iostream>
@@ -10,9 +11,17 @@ const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
 
 float vertices[] = {
-    0.5f, 0.5f, 0.0f,
-    -0.5f, 0.5f, 0.0f,
-    0.0f, -0.5f, 0.0f};
+    //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
+    0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // 右上
+    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // 右下
+    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // 左下
+    -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // 左上
+};
+
+unsigned int indices[] = {
+    0, 1, 3, // first triangle
+    1, 2, 3  // second triangle
+};
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -49,29 +58,63 @@ int main()
 
     // 构建和编译 shader 程序
     //--------------------------------------------------------------------------------------
-    char *vsPath = "/src/1.2 Shader/1.2.vs.glsl";
-    char *fsPath = "/src/1.2 Shader/1.2.fs.glsl";
+    char *vsPath = "/src/1.3 Textures/1.3.vs.glsl";
+    char *fsPath = "/src/1.3 Textures/1.3.fs.glsl";
     ShaderLoader shaderLoader(vsPath, fsPath, nullptr);
 
     // 设置顶点数据 配置顶点属性
     //--------------------------------------------------------------------------------------
     unsigned int VAO;
     unsigned int VBO;
+    unsigned int EBO;
     // 生成 VAO VBO
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
     // 首先绑定VAO
     glBindVertexArray(VAO);
     // 然后绑定并设置VBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    // 然后设置顶点属性
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
+    // 然后绑定并设置EBO
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    shaderLoader.use();                             // shaderLoader.use()之后设置
-    vec4 colorC = vec4(0.68f, 0.51f, 1.0f, 1.0f);
-    shaderLoader.setVec4("colorC", colorC);         // uniform 在 while 循环之前和循环中都要设置
+    // 然后设置顶点属性
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0 * sizeof(float)));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+
+    // 加载材质
+    //--------------------------------------------------------------------------------------
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    // 为当前绑定的纹理对象设置环绕 过滤方式
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // 加载并生成纹理
+    int width;
+    int height;
+    int nrChannels;
+    string texPath = shaderLoader.concatString(getcwd(NULL, 0), "/res/texture/box.jpg");
+    unsigned char *data = stbi_load(texPath.c_str(), &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        cout << "材质加载失败" << endl;
+    }
+    stbi_image_free(data);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -82,9 +125,12 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // 设置状态
         glClear(GL_COLOR_BUFFER_BIT);         // 使用状态
 
+        glBindTexture(GL_TEXTURE_2D, texture);
+
         shaderLoader.use();
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        // glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // 检查并调用事件，交换缓冲完成绘制
         glfwPollEvents();        // 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
