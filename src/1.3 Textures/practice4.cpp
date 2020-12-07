@@ -24,7 +24,7 @@ unsigned int indices[] = {
 };
 
 float alpha = 0.5f;
-
+float offsetX = 0;
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -148,6 +148,7 @@ int main()
     shaderLoader.setInt("texture1", 0);
     shaderLoader.setInt("texture2", 1);
     shaderLoader.setFloat("alpha", alpha);
+    shaderLoader.setFloat("offsetX", offsetX);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -165,6 +166,7 @@ int main()
 
         shaderLoader.use();
         shaderLoader.setFloat("alpha", alpha);
+        shaderLoader.setFloat("offsetX", offsetX);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -212,6 +214,22 @@ void processInput(GLFWwindow *window)
         if (alpha <= 0)
         {
             alpha = 0;
+        }
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        offsetX -= 0.01;
+        if (offsetX <= -1)
+        {
+            offsetX = -1;
+        }
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        offsetX += 0.01;
+        if (offsetX >= 1)
+        {
+            offsetX = 1;
         }
     }
 }
