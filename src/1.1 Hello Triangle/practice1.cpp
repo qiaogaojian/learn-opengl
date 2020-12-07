@@ -25,14 +25,16 @@ const char *fragmentShaderSource =
 
 float vertices[] =
 {
-    // 第一个三角形
-     -0.5f, -0.5f,  0.0f,
-    -0.5f,  0.5f,  0.0f,
-     0.0f,  0.0f,  0.0f,
-    // 第二个三角形
-     0.5f, -0.5f,  0.0f,
-     0.5f,  0.5f,  0.0f,
-     0.0f,  0.0f,  0.0f
+   -0.5f, -0.5f, 0.0f,			// 左下角
+	 0.5f, -0.5f, 0.0f,			// 右下角
+	 0.5f,  0.5f, 0.0f,			// 右上角
+	-0.5f,  0.5f, 0.0f			// 左上角
+};
+
+// 顶点索引
+unsigned int indices[] = {
+	0, 1, 2,
+	0, 2, 3
 };
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
@@ -46,7 +48,6 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // 如果使用的是Mac OS X系统 需要解注释这行代码
 
     // 创建窗口对象
     GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Learn OpenGL", NULL, NULL);
@@ -113,7 +114,6 @@ int main()
         cout << "错误::Shader::程序::链接失败\n"
              << infoLog << endl;
     }
-
     // 链接后释放已经不需要的 shader
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
@@ -122,14 +122,19 @@ int main()
     //--------------------------------------------------------------------------------------
     unsigned int VAO;
     unsigned int VBO;
+    unsigned int EBO;
     // 生成 VAO VBO
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
     // 首先绑定VAO
     glBindVertexArray(VAO);
     // 然后绑定并设置VBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     // 然后设置顶点属性
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
@@ -150,10 +155,10 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);         // 使用状态
 
         glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawArrays(GL_TRIANGLES, 3, 3);
-        glBindVertexArray(0);
+		glBindVertexArray(VAO);					// 因为只有一个 VAO 这里没有必要每次都绑定 VAO ,之所以这样写是为了更有组织行
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glBindVertexArray(0);					// 不需要每次都解绑
 
         // 检查并调用事件，交换缓冲完成绘制
         glfwPollEvents();        // 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
