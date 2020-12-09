@@ -2,10 +2,13 @@
 #include <GLFW/glfw3.h>
 #include "shader_loader.h"
 #include "stb_image.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <direct.h>
 #include <iostream>
 using namespace std;
+using namespace glm;
 
 const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
@@ -150,10 +153,17 @@ int main()
     shaderLoader.setFloat("alpha", alpha);
     shaderLoader.setFloat("offsetX", offsetX);
 
+    // 如果不是实时变换 放在渲染代码外面
+    // mat4 trans;
+    // trans = rotate(trans, radians(90.0f), vec3(0.0, 0.0, 1.0));
+    // trans = scale(trans, vec3(0.5f, 0.5f, 0.5f));
+    // shaderLoader.setMat4("transform", trans);
+
     while (!glfwWindowShouldClose(window))
     {
         // 处理输入
         processInput(window);
+        float time = (float)glfwGetTime();
 
         //处理渲染
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // 设置状态
@@ -167,6 +177,11 @@ int main()
         shaderLoader.use();
         shaderLoader.setFloat("alpha", alpha);
         shaderLoader.setFloat("offsetX", offsetX);
+        mat4 trans2;
+        trans2 = translate(trans2, vec3(0.5f, -0.5f, 0.0f));
+        trans2 = rotate(trans2, time, vec3(0.0, 0.0, 1.0));
+        trans2 = scale(trans2, vec3(0.5f, 0.5f, 0.5f));
+        shaderLoader.setMat4("transform", trans2);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glDrawArrays(GL_TRIANGLES, 0, 3);
