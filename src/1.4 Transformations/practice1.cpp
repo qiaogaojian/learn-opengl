@@ -178,8 +178,8 @@ int main()
         shaderLoader.setFloat("alpha", alpha);
         shaderLoader.setFloat("offsetX", offsetX);
         mat4 trans2;
-        trans2 = translate(trans2, vec3(0.5f, -0.5f, 0.0f));
         trans2 = rotate(trans2, time, vec3(0.0, 0.0, 1.0));
+        trans2 = translate(trans2, vec3(0.5f, -0.5f, 0.0f));
         trans2 = scale(trans2, vec3(0.5f, 0.5f, 0.5f));
         shaderLoader.setMat4("transform", trans2);
         glBindVertexArray(VAO);
