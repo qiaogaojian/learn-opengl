@@ -14,12 +14,47 @@ const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
 
 float vertices[] = {
-    //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-    0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // 右上
-    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // 右下
-    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // 左下
-    -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // 左上
-};
+    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+    0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+
+    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+    0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+    -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+
+    -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+    0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+
+    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
 
 unsigned int indices[] = {
     0, 1, 3, // first triangle
@@ -73,23 +108,17 @@ int main()
     // 生成 VAO VBO
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
     // 首先绑定VAO
     glBindVertexArray(VAO);
     // 然后绑定并设置VBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    // 然后绑定并设置EBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // 然后设置顶点属性
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0 * sizeof(float)));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(0 * sizeof(float)));
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
 
     // 加载材质
     //--------------------------------------------------------------------------------------
@@ -148,15 +177,6 @@ int main()
     shaderLoader.use();
     shaderLoader.setInt("texture1", 0);
     shaderLoader.setInt("texture2", 1);
-    mat4 model;
-    mat4 view;
-    mat4 projection;
-    model = rotate(model, -radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    view = translate(view, vec3(0.0f, 0.0f, -3.0f));
-    projection = perspective(radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
-    shaderLoader.setMat4("model", model);
-    shaderLoader.setMat4("view", view);
-    shaderLoader.setMat4("projection", projection);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -173,8 +193,18 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         shaderLoader.use();
+        mat4 model = mat4(1.0f);
+        mat4 view = mat4(1.0f);
+        mat4 projection = mat4(1.0f);
+        model = rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        view = translate(view, vec3(0.0f, 0.0f, -3.0f));
+        projection = perspective(radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
+        shaderLoader.setMat4("model", model);
+        shaderLoader.setMat4("view", view);
+        shaderLoader.setMat4("projection", projection);
+
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
         // glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // 检查并调用事件，交换缓冲完成绘制
