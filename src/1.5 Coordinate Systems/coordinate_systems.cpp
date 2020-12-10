@@ -185,7 +185,8 @@ int main()
 
         //处理渲染
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // 设置状态
-        glClear(GL_COLOR_BUFFER_BIT);         // 使用状态
+        glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);         // 使用状态
+        glEnable(GL_DEPTH_TEST);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
@@ -196,7 +197,7 @@ int main()
         mat4 model = mat4(1.0f);
         mat4 view = mat4(1.0f);
         mat4 projection = mat4(1.0f);
-        model = rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
         view = translate(view, vec3(0.0f, 0.0f, -3.0f));
         projection = perspective(radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderLoader.setMat4("model", model);
