@@ -2,20 +2,23 @@
 #include <GLFW/glfw3.h>
 #include "shader_loader.h"
 #include "stb_image.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <direct.h>
 #include <iostream>
 using namespace std;
+using namespace glm;
 
 const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
 
 float vertices[] = {
     //     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-     0.5f,  0.5f, 0.0f,     1.0f, 0.0f, 0.0f,     1.0f, 1.0f,  // 右上
-     0.5f, -0.5f, 0.0f,     0.0f, 1.0f, 0.0f,     1.0f, 0.0f,  // 右下
-    -0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f,     0.0f, 0.0f,  // 左下
-    -0.5f,  0.5f, 0.0f,     1.0f, 1.0f, 0.0f,     0.0f, 1.0f   // 左上
+    0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // 右上
+    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // 右下
+    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // 左下
+    -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // 左上
 };
 
 unsigned int indices[] = {
@@ -145,6 +148,15 @@ int main()
     shaderLoader.use();
     shaderLoader.setInt("texture1", 0);
     shaderLoader.setInt("texture2", 1);
+    mat4 model;
+    mat4 view;
+    mat4 projection;
+    model = rotate(model, -radians(60.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    view = translate(view, vec3(0.0f, 0.0f, -3.0f));
+    projection = perspective(radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
+    shaderLoader.setMat4("model", model);
+    shaderLoader.setMat4("view", view);
+    shaderLoader.setMat4("projection", projection);
 
     while (!glfwWindowShouldClose(window))
     {
