@@ -14,6 +14,9 @@ const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
 
 float radius = 20.0f;
+vec3 cameraPos = vec3(0.0f, 0.0f, 3.0f);    // 摄像机位置
+vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f); // 摄像机目标
+vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);     // 摄像机上向量
 
 float vertices[] = {
     -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
@@ -218,7 +221,7 @@ int main()
         view = translate(view, vec3(0.0f, 0.0f, -3.0f));
         float camX = cos(time) * radius;
         float camZ = sin(time) * radius;
-        view = lookAt(vec3(camX, 0, camZ), vec3(0, 0, 0), vec3(0.0, 1.0, 0.0));
+        view = lookAt(cameraPos, cameraFront, cameraUp);
         shaderLoader.setMat4("view", view);
 
         glBindVertexArray(VAO);
@@ -260,5 +263,25 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
+    }
+
+    float delta = 0.05f;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        cameraPos += cameraFront * delta;
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        cameraPos -= cameraFront * delta;
+    }
+    // 注意，我们对右向量进行了标准化。如果我们没对这个向量进行标准化，最后的叉乘结果会根据cameraFront变量返回大小不同的向量。
+    // 如果我们不对向量进行标准化，我们就得根据摄像机的朝向不同加速或减速移动了，但如果进行了标准化移动就是匀速的。
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        cameraPos += normalize(cross(cameraUp, cameraFront)) * delta;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        cameraPos -= normalize(cross(cameraUp, cameraFront)) * delta;
     }
 }
