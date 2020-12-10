@@ -13,6 +13,9 @@ using namespace glm;
 const unsigned int SCR_WIDTH = 800;  // ÆÁÄ»¿í¶È
 const unsigned int SCR_HEIGHT = 600; // ÆÁÄ»¸ß¶È
 
+float offsetX = 0;
+float offsetY = 0;
+
 float vertices[] = {
     -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
     0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
@@ -209,7 +212,7 @@ int main()
         shaderLoader.use();
         mat4 view = mat4(1.0f);
         mat4 projection = mat4(1.0f);
-        view = translate(view, vec3(0.0f, 0.0f, -3.0f));
+        view = translate(view, vec3(offsetX, offsetY, -3.0f));
         projection = perspective(radians(60.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderLoader.setMat4("view", view);
         shaderLoader.setMat4("projection", projection);
@@ -253,5 +256,21 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    {
+        offsetX -= 0.01f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    {
+        offsetX += 0.01f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        offsetY += 0.01f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        offsetY -= 0.01f;
     }
 }
