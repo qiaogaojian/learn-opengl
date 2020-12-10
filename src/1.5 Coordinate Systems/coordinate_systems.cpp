@@ -56,6 +56,18 @@ float vertices[] = {
     -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
     -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
 
+vec3 cubePositions[] = {
+    glm::vec3(0.0f, 0.0f, 0.0f),
+    glm::vec3(2.0f, 5.0f, -15.0f),
+    glm::vec3(-1.5f, -2.2f, -2.5f),
+    glm::vec3(-3.8f, -2.0f, -12.3f),
+    glm::vec3(2.4f, -0.4f, -3.5f),
+    glm::vec3(-1.7f, 3.0f, -7.5f),
+    glm::vec3(1.3f, -2.0f, -2.5f),
+    glm::vec3(1.5f, 2.0f, -2.5f),
+    glm::vec3(1.5f, 0.2f, -1.5f),
+    glm::vec3(-1.3f, 1.0f, -1.5f)};
+
 unsigned int indices[] = {
     0, 1, 3, // first triangle
     1, 2, 3  // second triangle
@@ -177,6 +189,7 @@ int main()
     shaderLoader.use();
     shaderLoader.setInt("texture1", 0);
     shaderLoader.setInt("texture2", 1);
+    shaderLoader.setFloat("alpha", 0.5f);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -184,8 +197,8 @@ int main()
         processInput(window);
 
         //处理渲染
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // 设置状态
-        glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);         // 使用状态
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);               // 设置状态
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 使用状态
         glEnable(GL_DEPTH_TEST);
 
         glActiveTexture(GL_TEXTURE0);
@@ -194,18 +207,22 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         shaderLoader.use();
-        mat4 model = mat4(1.0f);
         mat4 view = mat4(1.0f);
         mat4 projection = mat4(1.0f);
-        model = rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
         view = translate(view, vec3(0.0f, 0.0f, -3.0f));
-        projection = perspective(radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
-        shaderLoader.setMat4("model", model);
+        projection = perspective(radians(60.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderLoader.setMat4("view", view);
         shaderLoader.setMat4("projection", projection);
 
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        for (int i = 0; i < 10; i++)
+        {
+            mat4 model = mat4(1.0f);
+            model = translate(model, cubePositions[i]);
+            model = rotate(model, radians(20.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
+            shaderLoader.setMat4("model", model);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
         // glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // 检查并调用事件，交换缓冲完成绘制
