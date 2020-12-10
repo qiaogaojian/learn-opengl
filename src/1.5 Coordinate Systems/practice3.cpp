@@ -219,7 +219,14 @@ int main()
         {
             mat4 model = mat4(1.0f);
             model = translate(model, cubePositions[i]);
-            model = rotate(model, radians(20.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
+            if (i % 3 == 0)
+            {
+                model = rotate(model, (float)glfwGetTime() + radians(20.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
+            }
+            else
+            {
+                model = rotate(model, radians(20.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
+            }
             shaderLoader.setMat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
