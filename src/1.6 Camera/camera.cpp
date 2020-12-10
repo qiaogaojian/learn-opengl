@@ -13,6 +13,8 @@ using namespace glm;
 const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
 
+float radius = 20.0f;
+
 float vertices[] = {
     -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
     0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
@@ -195,6 +197,7 @@ int main()
     {
         // 处理输入
         processInput(window);
+        float time = (float)glfwGetTime();
 
         //处理渲染
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);               // 设置状态
@@ -207,12 +210,16 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         shaderLoader.use();
-        mat4 view = mat4(1.0f);
         mat4 projection = mat4(1.0f);
-        view = translate(view, vec3(0.0f, 0.0f, -3.0f));
         projection = perspective(radians(60.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
-        shaderLoader.setMat4("view", view);
         shaderLoader.setMat4("projection", projection);
+
+        mat4 view = mat4(1.0f);
+        view = translate(view, vec3(0.0f, 0.0f, -3.0f));
+        float camX = cos(time) * radius;
+        float camZ = sin(time) * radius;
+        view = lookAt(vec3(camX, 0, camZ), vec3(0, 0, 0), vec3(0.0, 1.0, 0.0));
+        shaderLoader.setMat4("view", view);
 
         glBindVertexArray(VAO);
         for (int i = 0; i < 10; i++)
