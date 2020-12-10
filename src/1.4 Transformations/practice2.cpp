@@ -183,8 +183,16 @@ int main()
         trans2 = scale(trans2, vec3(0.5f, 0.5f, 0.5f));
         shaderLoader.setMat4("transform", trans2);
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);    // 绘制第一个图形
         // glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        mat4 trans3;
+        trans3 = translate(trans3, vec3(-0.5f, 0.5f, 0.0f));
+        float scaler = sin(time);
+        trans3 = scale(trans3, vec3(scaler, scaler, scaler));
+        shaderLoader.setMat4("transform", trans3);
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);    // 绘制第二个图形
 
         // 检查并调用事件，交换缓冲完成绘制
         glfwPollEvents();        // 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
