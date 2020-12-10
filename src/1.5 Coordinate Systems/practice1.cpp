@@ -210,7 +210,8 @@ int main()
         mat4 view = mat4(1.0f);
         mat4 projection = mat4(1.0f);
         view = translate(view, vec3(0.0f, 0.0f, -3.0f));
-        projection = perspective(radians(60.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
+        // FOV最小0最大180 与物体大小成反比,  屏幕比例中 屏幕宽高与物体宽高成反比(SCR_WIDTH越大 绘制的物体越窄)
+        projection = perspective(radians(90.0f), (float)SCR_WIDTH * 2/ SCR_HEIGHT, 0.1f, 100.0f);
         shaderLoader.setMat4("view", view);
         shaderLoader.setMat4("projection", projection);
 
