@@ -2,6 +2,10 @@
   "files.encoding": "gb2312",
   "files.associations": {
     "cstdio": "cpp",
-    "fstream": "cpp"
+    "fstream": "cpp",
+    "ostream": "cpp",
+    "iomanip": "cpp",
+    "iosfwd": "cpp",
+    "cmath": "cpp"
 }
 }

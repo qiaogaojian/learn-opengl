@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "shader_loader.h"
+#include "camera.h"
 #include "stb_image.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -12,6 +13,8 @@ using namespace glm;
 
 const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
+
+Camera camera(vec3(0.0f, 0.0f, 3.0f));
 
 float radius = 20.0f;
 vec3 cameraPos = vec3(0.0f, 0.0f, 3.0f);    // 摄像机位置
@@ -207,15 +210,17 @@ int main()
     shaderLoader.setInt("texture2", 1);
     shaderLoader.setFloat("alpha", 0.5f);
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);    // 隐藏鼠标
     glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetScrollCallback(window,scroll_callback);
+    glfwSetScrollCallback(window, scroll_callback);
 
     while (!glfwWindowShouldClose(window))
     {
         // 处理输入
         processInput(window);
         float time = (float)glfwGetTime();
+        deltaTime = time - lastFrame;
+        lastFrame = time;
 
         //处理渲染
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);               // 设置状态
@@ -229,12 +234,10 @@ int main()
 
         shaderLoader.use();
         mat4 projection = mat4(1.0f);
-        projection = perspective(radians(fov), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
+        projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderLoader.setMat4("projection", projection);
 
-        mat4 view = mat4(1.0f);
-        view = lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-        shaderLoader.setMat4("view", view);
+        shaderLoader.setMat4("view", camera.GetViewMatrix());
 
         glBindVertexArray(VAO);
         for (int i = 0; i < 10; i++)
@@ -272,33 +275,28 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 // 处理输入
 void processInput(GLFWwindow *window)
 {
-    float time = (float)glfwGetTime();
-    deltaTime = time - lastFrame;
-    lastFrame = time;
-
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
     }
 
-    float delta = 5.0f * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        cameraPos += cameraFront * delta;
+        camera.ProcessKeyboard(FORWARD, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        cameraPos -= cameraFront * delta;
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
     }
     // 注意，我们对右向量进行了标准化。如果我们没对这个向量进行标准化，最后的叉乘结果会根据cameraFront变量返回大小不同的向量。
     // 如果我们不对向量进行标准化，我们就得根据摄像机的朝向不同加速或减速移动了，但如果进行了标准化移动就是匀速的。
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        cameraPos += normalize(cross(cameraUp, cameraFront)) * delta;
+        camera.ProcessKeyboard(LEFT, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        cameraPos -= normalize(cross(cameraUp, cameraFront)) * delta;
+        camera.ProcessKeyboard(RIGHT, deltaTime);
     }
 }
 
@@ -316,31 +314,10 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity = 0.05;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    yaw += xoffset;
-    pitch += yoffset;
-
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    glm::vec3 front;
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(front);
+    camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
-    if (fov >= 1.0f && fov <= 60.0f)
-        fov -= yoffset;
-    if (fov <= 1.0f)
-        fov = 1.0f;
-    if (fov >= 60.0f)
-        fov = 60.0f;
+    camera.ProcessMouseScroll(yoffset);
 }
