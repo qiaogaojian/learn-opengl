@@ -18,6 +18,15 @@ vec3 cameraPos = vec3(0.0f, 0.0f, 3.0f);    // 摄像机位置
 vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f); // 摄像机目标
 vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);     // 摄像机上向量
 
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+float lastX = SCR_WIDTH / 2;
+float lastY = SCR_HEIGHT / 2;
+float pitch;
+float yaw;
+bool isFirstCursor = true;
+float fov = 45.0f;
+
 float vertices[] = {
     -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
     0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
@@ -80,6 +89,8 @@ unsigned int indices[] = {
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
+void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
 int main()
 {
@@ -196,6 +207,10 @@ int main()
     shaderLoader.setInt("texture2", 1);
     shaderLoader.setFloat("alpha", 0.5f);
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window,scroll_callback);
+
     while (!glfwWindowShouldClose(window))
     {
         // 处理输入
@@ -214,14 +229,11 @@ int main()
 
         shaderLoader.use();
         mat4 projection = mat4(1.0f);
-        projection = perspective(radians(60.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
+        projection = perspective(radians(fov), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderLoader.setMat4("projection", projection);
 
         mat4 view = mat4(1.0f);
-        view = translate(view, vec3(0.0f, 0.0f, -3.0f));
-        float camX = cos(time) * radius;
-        float camZ = sin(time) * radius;
-        view = lookAt(cameraPos, cameraFront, cameraUp);
+        view = lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         shaderLoader.setMat4("view", view);
 
         glBindVertexArray(VAO);
@@ -257,9 +269,6 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
-
 // 处理输入
 void processInput(GLFWwindow *window)
 {
@@ -291,4 +300,47 @@ void processInput(GLFWwindow *window)
     {
         cameraPos -= normalize(cross(cameraUp, cameraFront)) * delta;
     }
+}
+
+void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+{
+    if (isFirstCursor)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        isFirstCursor = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    float sensitivity = 0.05;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw += xoffset;
+    pitch += yoffset;
+
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 front;
+    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    front.y = sin(glm::radians(pitch));
+    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(front);
+}
+
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+{
+    if (fov >= 1.0f && fov <= 60.0f)
+        fov -= yoffset;
+    if (fov <= 1.0f)
+        fov = 1.0f;
+    if (fov >= 60.0f)
+        fov = 60.0f;
 }
