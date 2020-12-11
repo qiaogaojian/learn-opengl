@@ -257,15 +257,22 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
 // ¥¶¿Ì ‰»Î
 void processInput(GLFWwindow *window)
 {
+    float time = (float)glfwGetTime();
+    deltaTime = time - lastFrame;
+    lastFrame = time;
+
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
     }
 
-    float delta = 0.05f;
+    float delta = 5.0f * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
         cameraPos += cameraFront * delta;
