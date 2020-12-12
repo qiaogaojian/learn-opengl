@@ -43,6 +43,8 @@ public:
     float MouseSensitivity;
     float Zoom;
 
+    float curPosY = 0;
+
     Camera(vec3 position = vec3(0.0f, 0.0f, 0.0f), vec3 up = vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
     {
         Position = position;
@@ -85,15 +87,17 @@ public:
             break;
         case UP:
             Position += WorldUp * velocity;
+            curPosY = Position.y;
             break;
         case DOWN:
             Position -= WorldUp * velocity;
+            curPosY = Position.y;
             break;
         }
 
         if (direction != UP && direction != DOWN)
         {
-            Position.y = 0.0f;
+            Position.y = curPosY;
         }
     }
 
