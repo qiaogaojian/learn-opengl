@@ -77,6 +77,8 @@ vec3 cubePositions[] = {
     glm::vec3(1.5f, 0.2f, -1.5f),
     glm::vec3(-1.3f, 1.0f, -1.5f)};
 
+vec3 lightPos(1.2f, 1.0f,2.0f);
+
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
@@ -116,7 +118,9 @@ int main()
     //--------------------------------------------------------------------------------------
     char *vsPath = "/src/2.1 Colors/2.1.vs.glsl";
     char *fsPath = "/src/2.1 Colors/2.1.fs.glsl";
-    ShaderLoader shaderLoader(vsPath, fsPath, nullptr);
+    char *fsLightPath = "/src/2.1 Colors/2.1.fs.lamp.glsl";
+    ShaderLoader shaderObject(vsPath, fsPath, nullptr);
+    ShaderLoader shaderLight(vsPath, fsLightPath, nullptr);
 
     // 设置顶点数据 配置顶点属性
     //--------------------------------------------------------------------------------------
@@ -138,9 +142,27 @@ int main()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    shaderLoader.use();
-    shaderLoader.setVec3("objectColor", vec3(1.0f, 0.5f, 0.31f));
-    shaderLoader.setVec3("lightColor", vec3(1.0f, 1.0f, 1.0f));
+    unsigned int lightVAO;
+    unsigned int lightVBO;
+    unsigned int lightEBO;
+    // 生成 VAO VBO
+    glGenVertexArrays(1, &lightVAO);
+    glGenBuffers(1, &lightVBO);
+    // 首先绑定VAO
+    glBindVertexArray(lightVAO);
+    // 然后绑定并设置VBO
+    glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // 然后设置顶点属性
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(0 * sizeof(float)));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    shaderObject.use();
+    shaderObject.setVec3("objectColor", vec3(1.0f, 0.5f, 0.31f));
+    shaderObject.setVec3("lightColor", vec3(1.0f, 1.0f, 1.0f));
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -155,16 +177,16 @@ int main()
         lastFrame = time;
 
         //处理渲染
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);               // 设置状态
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);               // 设置状态
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 使用状态
         glEnable(GL_DEPTH_TEST);
 
-        shaderLoader.use();
+        shaderObject.use();
         mat4 projection = mat4(1.0f);
         projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
-        shaderLoader.setMat4("projection", projection);
+        shaderObject.setMat4("projection", projection);
 
-        shaderLoader.setMat4("view", camera.GetViewMatrix());
+        shaderObject.setMat4("view", camera.GetViewMatrix());
 
         glBindVertexArray(VAO);
         for (int i = 0; i < 1; i++)
@@ -172,10 +194,22 @@ int main()
             mat4 model = mat4(1.0f);
             model = translate(model, cubePositions[i]);
             model = rotate(model, radians(20.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
-            shaderLoader.setMat4("model", model);
+            shaderObject.setMat4("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        shaderLight.use();
+        shaderLight.setMat4("projection", projection);
+        shaderLight.setMat4("view", camera.GetViewMatrix());
+        glBindVertexArray(VAO);
+        for (int i = 1; i < 2; i++)
+        {
+            mat4 model = mat4(1.0f);
+            model = translate(model, cubePositions[i]);
+            model = rotate(model, radians(20.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
+            shaderLight.setMat4("model", model);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         // 检查并调用事件，交换缓冲完成绘制
         glfwPollEvents();        // 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
@@ -227,11 +261,11 @@ void processInput(GLFWwindow *window)
     }
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
     {
-        camera.ProcessKeyboard(UP, deltaTime);
+        camera.ProcessKeyboard(DOWN, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
     {
-        camera.ProcessKeyboard(DOWN, deltaTime);
+        camera.ProcessKeyboard(UP, deltaTime);
     }
 }
 
