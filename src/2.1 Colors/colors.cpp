@@ -138,64 +138,9 @@ int main()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    // 加载材质
-    //--------------------------------------------------------------------------------------
-    // 第一个材质
-    unsigned int texture1;
-    glGenTextures(1, &texture1);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-    // 为当前绑定的纹理对象设置环绕 过滤方式
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // 加载并生成纹理
-    int width;
-    int height;
-    int nrChannels;
-    stbi_set_flip_vertically_on_load(true); // OpenGL要求y轴0.0坐标是在图片的底部的，但是图片的y轴0.0坐标通常在顶部,这里进行上下翻转
-    string texPath = shaderLoader.concatString(getcwd(NULL, 0), "/res/texture/box.jpg");
-    unsigned char *data = stbi_load(texPath.c_str(), &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        cout << "材质加载失败" << endl;
-    }
-    stbi_image_free(data);
-
-    // 第二个材质
-    unsigned int texture2;
-    glGenTextures(1, &texture2);
-    glBindTexture(GL_TEXTURE_2D, texture2);
-    // 为当前绑定的纹理对象设置环绕 过滤方式
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // 加载并生成纹理
-
-    texPath = shaderLoader.concatString(getcwd(NULL, 0), "/res/texture/smile.png");
-    data = stbi_load(texPath.c_str(), &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        // 注意这里的材质是透明的 有Alpha通道 要用GL_RGBA格式
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        cout << "材质加载失败" << endl;
-    }
-    stbi_image_free(data);
-
     shaderLoader.use();
-    shaderLoader.setInt("texture1", 0);
-    shaderLoader.setInt("texture2", 1);
-    shaderLoader.setFloat("alpha", 0.5f);
+    shaderLoader.setVec3("objectColor", vec3(1.0f, 0.5f, 0.31f));
+    shaderLoader.setVec3("lightColor", vec3(1.0f, 1.0f, 1.0f));
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -213,11 +158,6 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);               // 设置状态
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 使用状态
         glEnable(GL_DEPTH_TEST);
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
 
         shaderLoader.use();
         mat4 projection = mat4(1.0f);
