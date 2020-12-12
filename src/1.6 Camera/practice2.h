@@ -64,7 +64,7 @@ public:
     {
         mat4 m1 = CustomLookAt(Position, Position + Front, Up);
         mat4 m2 = lookAt(Position, Position + Front, Up);
-        return m2;
+        return m1;
     }
 
     void ProcessKeyboard(Camera_Movement direction, float deltaTime)
@@ -85,6 +85,7 @@ public:
             Position += Right * velocity;
             break;
         }
+        Position.y = 0.0f;
     }
 
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
@@ -131,6 +132,8 @@ private:
         front.y = sin(radians(Pitch));
         front.z = sin(radians(Yaw)) * cos(radians(Pitch));
 
+        // printf("front.x:\t%.2f\tfront.y:\t%.2f\tfront.z:\t%.2f\n", front.x, front.y, front.z);
+
         Front = normalize(front);
         Right = normalize(cross(Front, WorldUp)); // 叉乘使用右手坐标系 食指第一个参数 中指第二个参数 大拇指结果
         Up = normalize(cross(Right, Front));
@@ -138,17 +141,22 @@ private:
 
     // 自定义LookAt函数 eye 相机位置  center 目标位置  up 上向量
     // 返回观察矩阵
-    mat4 CustomLookAt(vec3 eyePos, vec3 targetPos, vec3 up)
+    mat4 CustomLookAt(vec3 eye, vec3 center, vec3 up)
     {
-        vec3 frontDir = eyePos - targetPos;                // 观察方向
-        vec3 rightDir = normalize(cross(up, frontDir));    // 右方向
-        vec3 upDir = normalize(cross(frontDir, rightDir)); // 上方向
-        mat4 m = mat4();
-        m[0] = vec4(frontDir, 0.0f);
-        m[1] = vec4(rightDir, 0.0f);
-        m[2] = vec4(upDir, 0.0f);
-        m[3] = vec4(targetPos, 0.0f);
-        return transpose(m);
+        vec3 z = normalize(eye - center); // 观察方向  指向z轴正方向
+        vec3 x = normalize(cross(up, z)); // 右方向 叉乘第一个参数食指 第二个参数中指 结果是大拇指
+        vec3 y = normalize(cross(z, x));  // 上方向
+        mat4 rotation = mat4(1.0f);
+        mat4 translation = mat4(1.0f);
+
+        rotation[0] = vec4(x, 0.0f);
+        rotation[1] = vec4(y, 0.0f);
+        rotation[2] = vec4(z, 0.0f);
+        rotation = transpose(rotation);
+
+        translation[3] = vec4(-eye, 1.0f);
+
+        return rotation * translation;  // 观察矩阵等于旋转矩阵乘以平移矩阵
     }
 };
 
