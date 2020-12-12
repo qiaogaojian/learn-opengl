@@ -13,7 +13,9 @@ enum Camera_Movement
     FORWARD,
     BACKWARD,
     LEFT,
-    RIGHT
+    RIGHT,
+    UP,
+    DOWN
 };
 
 // Ä¬ÈÏÉãÏñ»úÖµ
@@ -81,8 +83,18 @@ public:
         case RIGHT:
             Position += Right * velocity;
             break;
+        case UP:
+            Position += WorldUp * velocity;
+            break;
+        case DOWN:
+            Position -= WorldUp * velocity;
+            break;
         }
-        Position.y = 0.0f;
+
+        if (direction != UP && direction != DOWN)
+        {
+            Position.y = 0.0f;
+        }
     }
 
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
