@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
+#include <stdlib.h>
 using namespace glm;
 
 enum Camera_Movement
@@ -61,7 +62,9 @@ public:
 
     mat4 GetViewMatrix()
     {
-        return lookAt(Position, Position + Front, Up);
+        mat4 m1 = CustomLookAt(Position, Position + Front, Up);
+        mat4 m2 = lookAt(Position, Position + Front, Up);
+        return m2;
     }
 
     void ProcessKeyboard(Camera_Movement direction, float deltaTime)
@@ -131,6 +134,21 @@ private:
         Front = normalize(front);
         Right = normalize(cross(Front, WorldUp)); // 叉乘使用右手坐标系 食指第一个参数 中指第二个参数 大拇指结果
         Up = normalize(cross(Right, Front));
+    }
+
+    // 自定义LookAt函数 eye 相机位置  center 目标位置  up 上向量
+    // 返回观察矩阵
+    mat4 CustomLookAt(vec3 eyePos, vec3 targetPos, vec3 up)
+    {
+        vec3 frontDir = eyePos - targetPos;                // 观察方向
+        vec3 rightDir = normalize(cross(up, frontDir));    // 右方向
+        vec3 upDir = normalize(cross(frontDir, rightDir)); // 上方向
+        mat4 m = mat4();
+        m[0] = vec4(frontDir, 0.0f);
+        m[1] = vec4(rightDir, 0.0f);
+        m[2] = vec4(upDir, 0.0f);
+        m[3] = vec4(targetPos, 0.0f);
+        return transpose(m);
     }
 };
 
