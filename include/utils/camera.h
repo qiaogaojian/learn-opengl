@@ -6,7 +6,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
-#include <stdlib.h>
 using namespace glm;
 
 enum Camera_Movement
@@ -130,7 +129,7 @@ private:
         front.y = sin(radians(Pitch));
         front.z = sin(radians(Yaw)) * cos(radians(Pitch));
 
-        printf("front.x:\t%.2f\tfront.y:\t%.2f\tfront.z:\t%.2f\n", front.x, front.y, front.z);
+        // printf("front.x:\t%.2f\tfront.y:\t%.2f\tfront.z:\t%.2f\n", front.x, front.y, front.z);
 
         Front = normalize(front);
         Right = normalize(cross(Front, WorldUp)); // 叉乘使用右手坐标系 食指第一个参数 中指第二个参数 大拇指结果
