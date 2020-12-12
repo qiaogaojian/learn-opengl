@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "shader_loader.h"
+#include "camera.h"
 #include "stb_image.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -12,6 +13,14 @@ using namespace glm;
 
 const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
+
+Camera camera(vec3(0.0f, 0.0f, 3.0f));
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+float lastX = SCR_WIDTH / 2;
+float lastY = SCR_HEIGHT / 2;
+bool isFirstCursor = true;
 
 float vertices[] = {
     -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
@@ -68,13 +77,10 @@ vec3 cubePositions[] = {
     glm::vec3(1.5f, 0.2f, -1.5f),
     glm::vec3(-1.3f, 1.0f, -1.5f)};
 
-unsigned int indices[] = {
-    0, 1, 3, // first triangle
-    1, 2, 3  // second triangle
-};
-
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
+void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
 int main()
 {
@@ -108,8 +114,8 @@ int main()
 
     // 构建和编译 shader 程序
     //--------------------------------------------------------------------------------------
-    char *vsPath = "/src/1.5 Coordinate Systems/1.5.vs.glsl";
-    char *fsPath = "/src/1.5 Coordinate Systems/1.5.fs.glsl";
+    char *vsPath = "/src/2.1 Colors/2.1.vs.glsl";
+    char *fsPath = "/src/2.1 Colors/2.1.fs.glsl";
     ShaderLoader shaderLoader(vsPath, fsPath, nullptr);
 
     // 设置顶点数据 配置顶点属性
@@ -191,10 +197,17 @@ int main()
     shaderLoader.setInt("texture2", 1);
     shaderLoader.setFloat("alpha", 0.5f);
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+
     while (!glfwWindowShouldClose(window))
     {
         // 处理输入
         processInput(window);
+        float time = (float)glfwGetTime();
+        deltaTime = time - lastFrame;
+        lastFrame = time;
 
         //处理渲染
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);               // 设置状态
@@ -207,15 +220,14 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         shaderLoader.use();
-        mat4 view = mat4(1.0f);
         mat4 projection = mat4(1.0f);
-        view = translate(view, vec3(0.0f, 0.0f, -3.0f));
-        projection = perspective(radians(60.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
-        shaderLoader.setMat4("view", view);
+        projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderLoader.setMat4("projection", projection);
 
+        shaderLoader.setMat4("view", camera.GetViewMatrix());
+
         glBindVertexArray(VAO);
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 1; i++)
         {
             mat4 model = mat4(1.0f);
             model = translate(model, cubePositions[i]);
@@ -254,4 +266,45 @@ void processInput(GLFWwindow *window)
     {
         glfwSetWindowShouldClose(window, true);
     }
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+    }
+    // 注意，我们对右向量进行了标准化。如果我们没对这个向量进行标准化，最后的叉乘结果会根据cameraFront变量返回大小不同的向量。
+    // 如果我们不对向量进行标准化，我们就得根据摄像机的朝向不同加速或减速移动了，但如果进行了标准化移动就是匀速的。
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(LEFT, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+    }
+}
+
+void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+{
+    if (isFirstCursor)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        isFirstCursor = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+{
+    camera.ProcessMouseScroll(yoffset);
 }

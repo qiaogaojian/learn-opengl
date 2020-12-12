@@ -6,6 +6,8 @@
     "ostream": "cpp",
     "iomanip": "cpp",
     "iosfwd": "cpp",
-    "cmath": "cpp"
+    "cmath": "cpp",
+    "functional": "cpp",
+    "utility": "cpp"
 }
 }
