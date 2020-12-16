@@ -14,7 +14,8 @@ using namespace glm;
 const unsigned int SCR_WIDTH = 800;  // ÆÁÄ»¿í¶È
 const unsigned int SCR_HEIGHT = 600; // ÆÁÄ»¸ß¶È
 
-Camera camera(vec3(1.0f, 0, 5.0f), vec3(0.0f, 1.0f, 0.0f), -100, 0);
+vec3 cameraPos = vec3(1.0f, 0, 5.0f);
+Camera camera(cameraPos, vec3(0.0f, 1.0f, 0.0f), -100, 0);
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -161,6 +162,7 @@ int main()
     shaderObject.use();
     shaderObject.setVec3("objectColor", vec3(1.0f, 0.5f, 0.31f));
     shaderObject.setVec3("lightColor", vec3(1.0f, 1.0f, 1.0f));
+    shaderObject.setVec3("lightPos",lightPos);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Òþ²ØÊó±ê
     glfwSetCursorPosCallback(window, mouse_callback);
