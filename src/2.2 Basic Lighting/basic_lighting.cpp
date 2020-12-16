@@ -183,6 +183,7 @@ int main()
 
         // ªÊ÷∆ŒÔÃÂ
         shaderObject.use();
+        shaderObject.setVec3("viewPos",camera.Position);
         mat4 projection = mat4(1.0f);
         projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderObject.setMat4("projection", projection);
@@ -195,6 +196,7 @@ int main()
             model = translate(model, cubePositions[i]);
             model = rotate(model, radians(20.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
             shaderObject.setMat4("model", model);
+            shaderObject.setMat3("normalMat",transpose(inverse(model)));
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 

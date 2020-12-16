@@ -8,10 +8,11 @@ out vec3 FragPos;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat3 normalMat; // 法线矩阵 用来消除不同比例缩放对法线方向的影响
 
 void main()
 {
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
-    Normal = aNormal;
-    FragPos = vec3(model*vec4(aPos,1.0));
+    Normal = normalMat * aNormal;
+    FragPos = vec3(model * vec4(aPos,1.0));
 }
