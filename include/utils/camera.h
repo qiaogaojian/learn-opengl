@@ -19,8 +19,8 @@ enum Camera_Movement
 };
 
 // 默认摄像机值
-const float YAW = -90.0f;
-const float PITCH = 0.0f;
+const float YAW = -90.0f;   // 左右倾斜角度
+const float PITCH = 0.0f;   // 上下倾斜角度
 const float SPEED = 2.5f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;

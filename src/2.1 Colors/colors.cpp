@@ -14,7 +14,7 @@ using namespace glm;
 const unsigned int SCR_WIDTH = 800;  // 屏幕宽度
 const unsigned int SCR_HEIGHT = 600; // 屏幕高度
 
-Camera camera(vec3(0.0f, 0.0f, 3.0f));
+Camera camera(vec3(1.0f, 2.0f, 5.0f),vec3(0.0f, 1.0f, 0.0f),-100,-20);
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -23,47 +23,47 @@ float lastY = SCR_HEIGHT / 2;
 bool isFirstCursor = true;
 
 float vertices[] = {
-    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-    0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
 
-    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
-    -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f,
+     0.5f, -0.5f, 0.5f,
+     0.5f,  0.5f, 0.5f,
+     0.5f,  0.5f, 0.5f,
+    -0.5f,  0.5f, 0.5f,
+    -0.5f, -0.5f, 0.5f,
 
-    -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-    -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
 
-    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-    0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+    0.5f,  0.5f,  0.5f,
+    0.5f,  0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f,
+    0.5f, -0.5f, -0.5f,
+    0.5f, -0.5f,  0.5f,
+    0.5f,  0.5f,  0.5f,
 
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-    0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
-    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f, -0.5f,
 
-    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-    0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
-    -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
+    -0.5f, 0.5f, -0.5f,
+     0.5f, 0.5f, -0.5f,
+     0.5f, 0.5f,  0.5f,
+     0.5f, 0.5f,  0.5f,
+    -0.5f, 0.5f,  0.5f,
+    -0.5f, 0.5f, -0.5f };
 
 vec3 cubePositions[] = {
     glm::vec3(0.0f, 0.0f, 0.0f),
@@ -119,14 +119,14 @@ int main()
     char *vsPath = "/src/2.1 Colors/2.1.vs.glsl";
     char *fsPath = "/src/2.1 Colors/2.1.fs.glsl";
     char *fsLightPath = "/src/2.1 Colors/2.1.fs.lamp.glsl";
-    ShaderLoader shaderObject(vsPath, fsPath, nullptr);
-    ShaderLoader shaderLight(vsPath, fsLightPath, nullptr);
+    ShaderLoader shaderObject(vsPath, fsPath, nullptr);     // 受光物体shader程序
+    ShaderLoader shaderLight(vsPath, fsLightPath, nullptr); // 发光物体shader程序
 
     // 设置顶点数据 配置顶点属性
     //--------------------------------------------------------------------------------------
+    // 受光物体缓冲数据
     unsigned int VAO;
     unsigned int VBO;
-    unsigned int EBO;
     // 生成 VAO VBO
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -137,28 +137,24 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // 然后设置顶点属性
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(0 * sizeof(float)));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)(0));
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
 
-    unsigned int lightVAO;
-    unsigned int lightVBO;
-    unsigned int lightEBO;
-    // 生成 VAO VBO
-    glGenVertexArrays(1, &lightVAO);
-    glGenBuffers(1, &lightVBO);
-    // 首先绑定VAO
-    glBindVertexArray(lightVAO);
-    // 然后绑定并设置VBO
-    glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    // 发光物体缓冲数据 // 不用也行 只要 shader program是独立的就不会影响到发光物体
+    // unsigned int lightVAO;
+    // unsigned int lightVBO;
+    // // 生成 VAO VBO
+    // glGenVertexArrays(1, &lightVAO);
+    // glGenBuffers(1, &lightVBO);
+    // // 首先绑定VAO
+    // glBindVertexArray(lightVAO);
+    // // 然后绑定并设置VBO
+    // glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    // 然后设置顶点属性
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(0 * sizeof(float)));
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    // // 然后设置顶点属性
+    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)(0));
+    // glEnableVertexAttribArray(0);
 
     shaderObject.use();
     shaderObject.setVec3("objectColor", vec3(1.0f, 0.5f, 0.31f));
@@ -181,11 +177,11 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 使用状态
         glEnable(GL_DEPTH_TEST);
 
+        // 绘制物体
         shaderObject.use();
         mat4 projection = mat4(1.0f);
         projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderObject.setMat4("projection", projection);
-
         shaderObject.setMat4("view", camera.GetViewMatrix());
 
         glBindVertexArray(VAO);
@@ -198,18 +194,16 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
+        // 绘制灯
         shaderLight.use();
         shaderLight.setMat4("projection", projection);
         shaderLight.setMat4("view", camera.GetViewMatrix());
+        mat4 modelLight = mat4(1.0f);
+        modelLight = translate(modelLight, lightPos);
+        modelLight = scale(modelLight, vec3(0.2f));
+        shaderLight.setMat4("model", modelLight);
         glBindVertexArray(VAO);
-        for (int i = 1; i < 2; i++)
-        {
-            mat4 model = mat4(1.0f);
-            model = translate(model, cubePositions[i]);
-            model = rotate(model, radians(20.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
-            shaderLight.setMat4("model", model);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // 检查并调用事件，交换缓冲完成绘制
         glfwPollEvents();        // 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
@@ -220,7 +214,8 @@ int main()
     //--------------------------------------------------------------------------------------
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    // glDeleteVertexArrays(1, &lightVAO);
+    // glDeleteBuffers(1, &lightVBO);
 
     // 释放GLFW资源
     glfwTerminate(); // 当渲染循环结束后我们需要正确释放/删除之前的分配的所有资源 这样便能清理所有的资源并正确地退出应用程序
