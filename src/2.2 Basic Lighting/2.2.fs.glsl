@@ -25,7 +25,7 @@ void main()
     float specularStrength=.5;
     vec3 viewDir=normalize(viewPos-FragPos);
     vec3 reflectDir=reflect(-lightDir,normalDir);// 反射函数第一个参数是入射光方向 第二个参数是法线方向
-    float spec=pow(max(dot(viewDir,reflectDir),0),64);
+    float spec=pow(max(dot(viewDir,reflectDir),0),32);
     vec3 specular=specularStrength*spec*lightColor;
 
     vec3 result=(ambient+diffuse+specular)*objectColor;
