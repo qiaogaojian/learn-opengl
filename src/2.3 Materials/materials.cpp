@@ -160,15 +160,23 @@ int main()
     // glEnableVertexAttribArray(0);
 
     vec3 objectColor = vec3(1.0f, 0.5f, 0.31f);
-    vec3 lightColor = vec3(1.0f, 0.0f, 0.0f);
+    vec3 lightColor = vec3(1.0f, 0.5f, 0.31f);
+    vec3 spotColor = vec3(0.5f, 0.5f, 0.5f);
 
     shaderObject.use();
-    shaderObject.setVec3("objectColor", objectColor);
-    shaderObject.setVec3("lightColor", lightColor);
-    shaderObject.setVec3("lightPos",lightPos);
+    // 材质设置(各个类型光照的颜色和反光度)
+    shaderObject.setVec3("material.ambient", objectColor);
+    shaderObject.setVec3("material.diffuse", lightColor);
+    shaderObject.setVec3("material.specular", spotColor);
+    shaderObject.setFloat("material.shininess", 32.0f);
+    // 光照设置(光照位置和光照强度)
+    shaderObject.setVec3("light.ambient", vec3(0.2f));
+    shaderObject.setVec3("light.diffuse", vec3(0.3f)); // 将漫反射调暗了一些以搭配场景
+    shaderObject.setVec3("light.specular", vec3(1.0f));
+    shaderObject.setVec3("light.position", lightPos);
 
     shaderLight.use();
-    shaderLight.setVec3("lightColor",lightColor);
+    shaderLight.setVec3("lightColor", lightColor);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -189,7 +197,7 @@ int main()
 
         // 绘制物体
         shaderObject.use();
-        shaderObject.setVec3("viewPos",camera.Position);
+        shaderObject.setVec3("viewPos", camera.Position);
         mat4 projection = mat4(1.0f);
         projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderObject.setMat4("projection", projection);
@@ -202,7 +210,7 @@ int main()
             model = translate(model, cubePositions[i]);
             model = rotate(model, radians(20.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
             shaderObject.setMat4("model", model);
-            shaderObject.setMat3("normalMat",transpose(inverse(model)));
+            shaderObject.setMat3("normalMat", transpose(inverse(model)));
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
