@@ -162,7 +162,7 @@ int main()
     shaderObject.use();
     shaderObject.setVec3("objectColor", vec3(1.0f, 0.5f, 0.31f));
     shaderObject.setVec3("lightColor", vec3(1.0f, 1.0f, 1.0f));
-    shaderObject.setVec3("lightPos",lightPos);
+
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -184,6 +184,8 @@ int main()
         // 绘制物体
         shaderObject.use();
         shaderObject.setVec3("viewPos",camera.Position);
+        vec3 newLightPos = vec3(lightPos.x + sin(time),lightPos.y+cos(time),lightPos.z);
+        shaderObject.setVec3("lightPos",newLightPos);
         mat4 projection = mat4(1.0f);
         projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderObject.setMat4("projection", projection);
@@ -205,7 +207,7 @@ int main()
         shaderLight.setMat4("projection", projection);
         shaderLight.setMat4("view", camera.GetViewMatrix());
         mat4 modelLight = mat4(1.0f);
-        modelLight = translate(modelLight, lightPos);
+        modelLight = translate(modelLight, newLightPos);
         modelLight = scale(modelLight, vec3(0.2f));
         shaderLight.setMat4("model", modelLight);
         glBindVertexArray(VAO);
