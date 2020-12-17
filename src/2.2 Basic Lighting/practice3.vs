@@ -11,7 +11,6 @@ uniform mat4 view;
 uniform mat4 projection;
 uniform mat3 normalMat; // 法线矩阵 用来消除不同比例缩放对法线方向的影响
 uniform vec3 lightPos;
-uniform vec3 viewPos;
 
 void main()
 {
@@ -19,6 +18,5 @@ void main()
     Normal = normalMat * aNormal;
     FragPos = vec3(view * model * vec4(aPos,1.0));
     vec4 lp = view * vec4(lightPos,1.0) ;
-    vec4 vp = view * vec4(viewPos,1.0);
     lightPosition = vec3(lp.x,lp.y,lp.z);
 }

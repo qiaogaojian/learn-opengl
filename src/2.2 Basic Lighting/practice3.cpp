@@ -183,7 +183,6 @@ int main()
 
         // ªÊ÷∆ŒÔÃÂ
         shaderObject.use();
-        shaderObject.setVec3("viewPos",camera.Position);
         mat4 projection = mat4(1.0f);
         projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderObject.setMat4("projection", projection);
