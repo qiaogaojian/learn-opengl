@@ -117,8 +117,8 @@ int main()
 
     // 构建和编译 shader 程序
     //--------------------------------------------------------------------------------------
-    char *vsPath = "/src/2.3 Materials/materials.vs";
-    char *fsPath = "/src/2.3 Materials/materials.fs";
+    char *vsPath = "/src/2.4 Lighting Maps/lighting_maps.vs";
+    char *fsPath = "/src/2.4 Lighting Maps/lighting_maps.fs";
     char *fsLightPath = "/src/2.3 Materials/light.fs";
     ShaderLoader shaderObject(vsPath, fsPath, nullptr);     // 受光物体shader程序
     ShaderLoader shaderLight(vsPath, fsLightPath, nullptr); // 发光物体shader程序
