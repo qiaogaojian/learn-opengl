@@ -117,7 +117,7 @@ int main()
 
     // 构建和编译 shader 程序
     //--------------------------------------------------------------------------------------
-    char *vsPath = "/src/2.2 Basic Lighting/2.2.vs.glsl";
+    char *vsPath = "/src/2.2 Basic Lighting/practice3.vs";
     char *fsPath = "/src/2.2 Basic Lighting/practice3.fs";
     char *fsLightPath = "/src/2.2 Basic Lighting/2.2.fs.lamp.glsl";
     ShaderLoader shaderObject(vsPath, fsPath, nullptr);     // 受光物体shader程序
@@ -196,7 +196,7 @@ int main()
             model = translate(model, cubePositions[i]);
             model = rotate(model, radians(20.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
             shaderObject.setMat4("model", model);
-            shaderObject.setMat3("normalMat",transpose(inverse(model)));
+            shaderObject.setMat3("normalMat",transpose(inverse(camera.GetViewMatrix() * model)));
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
