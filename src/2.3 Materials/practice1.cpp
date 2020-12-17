@@ -217,7 +217,7 @@ int main()
         shaderObject.setVec3("material.specular", 0.50196078f, 0.50196078f, 0.50196078f);
         shaderObject.setFloat("material.shininess", 0.25f * 128);
         // 光照设置(光照位置和光照颜色)
-        shaderObject.setVec3("light.ambient", vec3(0.1f));
+        shaderObject.setVec3("light.ambient", vec3(1.0f));
         shaderObject.setVec3("light.diffuse", vec3(1.0f));
         shaderObject.setVec3("light.specular", vec3(1.0f));
         shaderObject.setVec3("light.position", lightPos);
@@ -241,7 +241,7 @@ int main()
 
         // 绘制灯
         shaderLight.use();
-        shaderLight.setVec3("lightColor", lightColor);
+        shaderLight.setVec3("lightColor", vec3(1.0f));
         shaderLight.setMat4("projection", projection);
         shaderLight.setMat4("view", camera.GetViewMatrix());
         mat4 modelLight = mat4(1.0f);
