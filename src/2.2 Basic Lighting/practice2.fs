@@ -12,7 +12,7 @@ uniform vec3 viewPos;
 void main()
 {
     // 环境光
-    float ambientStrength=.1;
+    float ambientStrength=.2;   // 环境光强度 越大整体越亮
     vec3 ambient=ambientStrength*lightColor;
 
     // 漫反射
@@ -22,10 +22,10 @@ void main()
     vec3 diffuse=diff*lightColor;
 
     // 镜面反射
-    float specularStrength=.5;
+    float specularStrength=.8;  // 镜面反射强度 越大反射强度越高
     vec3 viewDir=normalize(viewPos-FragPos);
     vec3 reflectDir=reflect(-lightDir,normalDir);// 反射函数第一个参数是入射光方向 第二个参数是法线方向
-    float spec=pow(max(dot(viewDir,reflectDir),0),32);
+    float spec=pow(max(dot(viewDir,reflectDir),0),128);// 反光度
     vec3 specular=specularStrength*spec*lightColor;
 
     vec3 result=(ambient+diffuse+specular)*objectColor;
