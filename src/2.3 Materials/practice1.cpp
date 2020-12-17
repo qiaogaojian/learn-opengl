@@ -212,13 +212,13 @@ int main()
         // yellow rubber	0.05	    0.05	    0.0	            0.5	        0.5	        0.4	            0.7	        0.7	        0.04	        0.078125
 
         // 材质设置(各个类型光照的颜色和反光度)
-        shaderObject.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        shaderObject.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        shaderObject.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-        shaderObject.setFloat("material.shininess", 32.0f);
+        shaderObject.setVec3("material.ambient", 0.0f, 0.1f, 0.06f);
+        shaderObject.setVec3("material.diffuse", 0.0f, 0.50980392f, 0.50980392f);
+        shaderObject.setVec3("material.specular", 0.50196078f, 0.50196078f, 0.50196078f);
+        shaderObject.setFloat("material.shininess", 0.25f * 128);
         // 光照设置(光照位置和光照颜色)
-        shaderObject.setVec3("light.ambient", ambientColor);
-        shaderObject.setVec3("light.diffuse", lightColor); // 将漫反射调暗了一些以搭配场景
+        shaderObject.setVec3("light.ambient", vec3(0.1f));
+        shaderObject.setVec3("light.diffuse", vec3(1.0f)); // 将漫反射调暗了一些以搭配场景
         shaderObject.setVec3("light.specular", vec3(1.0f));
         shaderObject.setVec3("light.position", lightPos);
 
