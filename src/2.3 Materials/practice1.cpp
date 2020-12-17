@@ -185,7 +185,7 @@ int main()
         lightColor.z = sin(glfwGetTime() * 1.3f);
         vec3 ambientColor = lightColor * 0.2f;
         vec3 spotColor = vec3(0.5f, 0.5f, 0.5f);
-        // 材质系数                       环境光                                   漫反射                                   镜面反射                    反光度
+        // 材质表格                       环境光                                   漫反射                                   镜面反射                    反光度
         // emerald	        0.0215,	    0.1745	    0.0215	        0.07568	    0.61424	    0.07568	        0.633	    0.727811	0.633	        0.6
         // jade	            0.135	    0.2225	    0.1575	        0.54	    0.89	    0.63	        0.316228	0.316228	0.316228	    0.1
         // obsidian	        0.05375	    0.05	    0.06625	        0.18275	    0.17	    0.22525	        0.332741	0.328634	0.346435	    0.3
@@ -212,13 +212,13 @@ int main()
         // yellow rubber	0.05	    0.05	    0.0	            0.5	        0.5	        0.4	            0.7	        0.7	        0.04	        0.078125
 
         // 材质设置(各个类型光照的颜色和反光度)
-        shaderObject.setVec3("material.ambient", ambientColor);
-        shaderObject.setVec3("material.diffuse", lightColor);
-        shaderObject.setVec3("material.specular", spotColor);
+        shaderObject.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        shaderObject.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+        shaderObject.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
         shaderObject.setFloat("material.shininess", 32.0f);
-        // 光照设置(光照位置和光照强度)
-        shaderObject.setVec3("light.ambient", vec3(0.2f));
-        shaderObject.setVec3("light.diffuse", vec3(0.3f)); // 将漫反射调暗了一些以搭配场景
+        // 光照设置(光照位置和光照颜色)
+        shaderObject.setVec3("light.ambient", ambientColor);
+        shaderObject.setVec3("light.diffuse", lightColor); // 将漫反射调暗了一些以搭配场景
         shaderObject.setVec3("light.specular", vec3(1.0f));
         shaderObject.setVec3("light.position", lightPos);
 
