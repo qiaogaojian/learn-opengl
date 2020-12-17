@@ -25,7 +25,7 @@ void main()
     float specularStrength=.8;  // 镜面反射强度 越大反射强度越高
     vec3 viewDir=normalize(viewPos-FragPos);
     vec3 reflectDir=reflect(-lightDir,normalDir);// 反射函数第一个参数是入射光方向 第二个参数是法线方向
-    float spec=pow(max(dot(viewDir,reflectDir),0),128);// 反光度
+    float spec=pow(max(dot(viewDir,reflectDir),0),128);// 反光度 影响反光范围的大小
     vec3 specular=specularStrength*spec*lightColor;
 
     vec3 result=(ambient+diffuse+specular)*objectColor;
