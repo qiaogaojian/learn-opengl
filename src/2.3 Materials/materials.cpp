@@ -159,25 +159,6 @@ int main()
     // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)(0));
     // glEnableVertexAttribArray(0);
 
-    vec3 objectColor = vec3(1.0f, 0.5f, 0.31f);
-    vec3 lightColor = vec3(1.0f, 0.5f, 0.31f);
-    vec3 spotColor = vec3(0.5f, 0.5f, 0.5f);
-
-    shaderObject.use();
-    // 材质设置(各个类型光照的颜色和反光度)
-    shaderObject.setVec3("material.ambient", objectColor);
-    shaderObject.setVec3("material.diffuse", lightColor);
-    shaderObject.setVec3("material.specular", spotColor);
-    shaderObject.setFloat("material.shininess", 32.0f);
-    // 光照设置(光照位置和光照强度)
-    shaderObject.setVec3("light.ambient", vec3(0.2f));
-    shaderObject.setVec3("light.diffuse", vec3(0.3f)); // 将漫反射调暗了一些以搭配场景
-    shaderObject.setVec3("light.specular", vec3(1.0f));
-    shaderObject.setVec3("light.position", lightPos);
-
-    shaderLight.use();
-    shaderLight.setVec3("lightColor", lightColor);
-
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -197,6 +178,25 @@ int main()
 
         // 绘制物体
         shaderObject.use();
+
+        vec3 lightColor = vec3(1.0f);
+        lightColor.x = sin(glfwGetTime() * 2.0f);
+        lightColor.y = sin(glfwGetTime() * 0.7f);
+        lightColor.z = sin(glfwGetTime() * 1.3f);
+        vec3 ambientColor = lightColor * 0.2f;
+        vec3 spotColor = vec3(0.5f, 0.5f, 0.5f);
+
+        // 材质设置(各个类型光照的颜色和反光度)
+        shaderObject.setVec3("material.ambient", ambientColor);
+        shaderObject.setVec3("material.diffuse", lightColor);
+        shaderObject.setVec3("material.specular", spotColor);
+        shaderObject.setFloat("material.shininess", 32.0f);
+        // 光照设置(光照位置和光照强度)
+        shaderObject.setVec3("light.ambient", vec3(0.2f));
+        shaderObject.setVec3("light.diffuse", vec3(0.3f)); // 将漫反射调暗了一些以搭配场景
+        shaderObject.setVec3("light.specular", vec3(1.0f));
+        shaderObject.setVec3("light.position", lightPos);
+
         shaderObject.setVec3("viewPos", camera.Position);
         mat4 projection = mat4(1.0f);
         projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
@@ -216,6 +216,7 @@ int main()
 
         // 绘制灯
         shaderLight.use();
+        shaderLight.setVec3("lightColor", lightColor);
         shaderLight.setMat4("projection", projection);
         shaderLight.setMat4("view", camera.GetViewMatrix());
         mat4 modelLight = mat4(1.0f);
