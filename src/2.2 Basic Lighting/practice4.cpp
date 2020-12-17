@@ -164,7 +164,7 @@ int main()
     shaderObject.setVec3("lightColor", vec3(1.0f, 1.0f, 1.0f));
     shaderObject.setVec3("lightPos",lightPos);
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // вўВиЪѓБъ
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // вўВиЪѓБъ
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
