@@ -187,13 +187,13 @@ int main()
         vec3 spotColor = vec3(0.5f, 0.5f, 0.5f);
 
         // 材质设置(各个类型光照的颜色和反光度)
-        shaderObject.setVec3("material.ambient", ambientColor);
-        shaderObject.setVec3("material.diffuse", lightColor);
-        shaderObject.setVec3("material.specular", spotColor);
-        shaderObject.setFloat("material.shininess", 32.0f);
+        shaderObject.setVec3("material.ambient", 0.0f, 0.1f, 0.06f);
+        shaderObject.setVec3("material.diffuse", 0.0f, 0.50980392f, 0.50980392f);
+        shaderObject.setVec3("material.specular", 0.50196078f, 0.50196078f, 0.50196078f);
+        shaderObject.setFloat("material.shininess", 0.25f * 128);
         // 光照设置(光照位置和光照强度)
-        shaderObject.setVec3("light.ambient", vec3(0.2f));
-        shaderObject.setVec3("light.diffuse", vec3(0.3f)); // 将漫反射调暗了一些以搭配场景
+        shaderObject.setVec3("light.ambient", vec3(1.0f));
+        shaderObject.setVec3("light.diffuse", vec3(1.0f));
         shaderObject.setVec3("light.specular", vec3(1.0f));
         shaderObject.setVec3("light.position", lightPos);
 
