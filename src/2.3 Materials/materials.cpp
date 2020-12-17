@@ -159,10 +159,16 @@ int main()
     // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)(0));
     // glEnableVertexAttribArray(0);
 
+    vec3 objectColor = vec3(1.0f, 0.5f, 0.31f);
+    vec3 lightColor = vec3(1.0f, 0.0f, 0.0f);
+
     shaderObject.use();
-    shaderObject.setVec3("objectColor", vec3(1.0f, 0.5f, 0.31f));
-    shaderObject.setVec3("lightColor", vec3(1.0f, 1.0f, 1.0f));
+    shaderObject.setVec3("objectColor", objectColor);
+    shaderObject.setVec3("lightColor", lightColor);
     shaderObject.setVec3("lightPos",lightPos);
+
+    shaderLight.use();
+    shaderLight.setVec3("lightColor",lightColor);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Òþ²ØÊó±ê
     glfwSetCursorPosCallback(window, mouse_callback);
