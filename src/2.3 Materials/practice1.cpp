@@ -218,7 +218,7 @@ int main()
         shaderObject.setFloat("material.shininess", 0.25f * 128);
         // 光照设置(光照位置和光照颜色)
         shaderObject.setVec3("light.ambient", vec3(0.1f));
-        shaderObject.setVec3("light.diffuse", vec3(1.0f)); // 将漫反射调暗了一些以搭配场景
+        shaderObject.setVec3("light.diffuse", vec3(1.0f));
         shaderObject.setVec3("light.specular", vec3(1.0f));
         shaderObject.setVec3("light.position", lightPos);
 
