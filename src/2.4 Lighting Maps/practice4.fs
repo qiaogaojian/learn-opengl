@@ -22,6 +22,7 @@ out vec4 FragColor;
 uniform vec3 viewPos;
 uniform Material material;
 uniform Light light;
+uniform sampler2D emission;
 
 void main()
 {
@@ -40,6 +41,9 @@ void main()
     float spec=pow(max(dot(viewDir,reflectDir),0),32);
     vec3 specular=light.specular * spec * vec3(texture(material.specular,TexCoord));
 
+    // ·¢¹â
+    vec3 emiss = vec3(texture(emission, TexCoord));
+
     vec3 result=ambient+diffuse+specular;
-    FragColor=vec4(result,1.);
+    FragColor=vec4(result + emiss,1.);
 }

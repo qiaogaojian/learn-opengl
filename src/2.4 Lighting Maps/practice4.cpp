@@ -156,9 +156,15 @@ int main()
     texPath = shaderObject.concatString(getcwd(NULL, 0), "/res/texture/box2_specular.png");
     unsigned int texture_specular = loadTexture(texPath.c_str());
 
+
+    // 第三个材质 发光贴图
+    texPath = shaderObject.concatString(getcwd(NULL, 0), "/res/texture/matrix.jpg");
+    unsigned int texture_emission = loadTexture(texPath.c_str());
+
     shaderObject.use();
     shaderObject.setInt("material.diffuse",0);
     shaderObject.setInt("material.specular",1);
+    shaderObject.setInt("emission",2);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -182,6 +188,8 @@ int main()
         // 别忘了激活第二个材质
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture_specular);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, texture_emission);
 
         // 绘制物体
         shaderObject.use();
@@ -196,8 +204,8 @@ int main()
         // 材质设置(各个类型光照的颜色和反光度)
         shaderObject.setFloat("material.shininess", 0.25f * 128);
         // 光照设置(光照位置和光照强度)
-        shaderObject.setVec3("light.ambient", vec3(1.0f));
-        shaderObject.setVec3("light.diffuse", vec3(1.0f));
+        shaderObject.setVec3("light.ambient", vec3(.3f));
+        shaderObject.setVec3("light.diffuse", vec3(.8f));
         shaderObject.setVec3("light.specular", vec3(1.0f));
         shaderObject.setVec3("light.position", lightPos);
 
