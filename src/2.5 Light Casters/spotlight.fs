@@ -45,7 +45,7 @@ void main()
          // 镜面反射
          vec3 viewDir=normalize(viewPos-FragPos);
          vec3 reflectDir=reflect(-lightDir,normalize(Normal));// 反射函数第一个参数是入射光方向 第二个参数是法线方向
-         float spec=pow(max(dot(viewDir,reflectDir),0),shininess);
+         float spec=pow(max(dot(viewDir,reflectDir),0),material.shininess);
          vec3 specular=light.specular * spec * vec3(texture(material.specular,TexCoord)) * attenuation;
          FragColor = vec4(ambient + spot + specular, 1.);
     } else {                   // 只有环境光

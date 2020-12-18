@@ -160,8 +160,8 @@ int main()
     shaderObject.setInt("material.diffuse",0);
     shaderObject.setInt("material.specular",1);
     shaderObject.setFloat("light.constant",  1.0f);
-    shaderObject.setFloat("light.linear",    0.09f);
-    shaderObject.setFloat("light.quadratic", 0.032f);
+    shaderObject.setFloat("light.linear",    0.009f);
+    shaderObject.setFloat("light.quadratic", 0.00032f);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Òþ²ØÊó±ê
     glfwSetCursorPosCallback(window, mouse_callback);
