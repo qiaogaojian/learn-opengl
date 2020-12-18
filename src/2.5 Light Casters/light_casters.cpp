@@ -159,8 +159,11 @@ int main()
     shaderObject.use();
     shaderObject.setInt("material.diffuse",0);
     shaderObject.setInt("material.specular",1);
+    shaderObject.setFloat("light.constant",  1.0f);
+    shaderObject.setFloat("light.linear",    0.09f);
+    shaderObject.setFloat("light.quadratic", 0.032f);
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Òþ²ØÊó±ê
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Òþ²ØÊó±ê
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
@@ -199,7 +202,7 @@ int main()
         shaderObject.setVec3("light.ambient", vec3(.3f));
         shaderObject.setVec3("light.diffuse", vec3(1.0f));
         shaderObject.setVec3("light.specular", vec3(1.0f));
-        shaderObject.setVec4("light.direction", vec4(-0.2f, -1.0f, -0.3f, 0.0f));
+        shaderObject.setVec4("light.direction", vec4(0.2f, 1.0f, 0.3f, 1.0f));
 
         shaderObject.setVec3("viewPos", camera.Position);
         mat4 projection = mat4(1.0f);
