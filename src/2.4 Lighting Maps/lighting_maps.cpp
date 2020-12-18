@@ -148,9 +148,13 @@ int main()
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    // 第一个材质
+    // 第一个材质 漫反射贴图
     string texPath = shaderObject.concatString(getcwd(NULL, 0), "/res/texture/box2.png");
     unsigned int texture = loadTexture(texPath.c_str());
+
+    // 第二个材质 镜面反射贴图
+    texPath = shaderObject.concatString(getcwd(NULL, 0), "/res/texture/box2_specular.png");
+    unsigned int texture_specular = loadTexture(texPath.c_str());
 
     // unsigned int texture;
     // glGenTextures(1, &texture);
@@ -179,8 +183,9 @@ int main()
     // stbi_image_free(data);
     shaderObject.use();
     shaderObject.setInt("material.diffuse",0);
+    shaderObject.setInt("material.specular",1);
 
-    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
@@ -199,6 +204,9 @@ int main()
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
+        // 别忘了激活第二个材质
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture_specular);
 
         // 绘制物体
         shaderObject.use();
@@ -211,9 +219,6 @@ int main()
         vec3 spotColor = vec3(0.5f, 0.5f, 0.5f);
 
         // 材质设置(各个类型光照的颜色和反光度)
-        shaderObject.setVec3("material.ambient", 0.0f, 0.1f, 0.06f);
-        shaderObject.setVec3("material.diffuse", 0.0f, 0.50980392f, 0.50980392f);
-        shaderObject.setVec3("material.specular", 0.50196078f, 0.50196078f, 0.50196078f);
         shaderObject.setFloat("material.shininess", 0.25f * 128);
         // 光照设置(光照位置和光照强度)
         shaderObject.setVec3("light.ambient", vec3(1.0f));
