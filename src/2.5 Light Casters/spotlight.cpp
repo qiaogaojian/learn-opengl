@@ -197,8 +197,8 @@ int main()
         shaderObject.setFloat("material.shininess", 0.25f * 128);
         // 光照设置(光照位置和光照强度)
 
-        shaderObject.setVec3("light.ambient", vec3(.1f));
-        shaderObject.setVec3("light.diffuse", vec3(1.0f));
+        shaderObject.setVec3("light.ambient", vec3(.5f));
+        shaderObject.setVec3("light.diffuse", vec3(.5f));
         shaderObject.setVec3("light.specular", vec3(1.0f));
         shaderObject.setFloat("light.constant",  1.0f);
         shaderObject.setFloat("light.linear",    0.009f);
