@@ -331,8 +331,7 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
     camera.ProcessMouseScroll(yoffset);
 }
 
-// utility function for loading a 2D texture from file
-// ---------------------------------------------------
+// 从路径加载材质 返回材质ID
 unsigned int loadTexture(char const * path)
 {
     unsigned int textureID;
