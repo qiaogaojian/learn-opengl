@@ -202,7 +202,7 @@ int main()
         shaderObject.setVec3("light.ambient", vec3(.3f));
         shaderObject.setVec3("light.diffuse", vec3(1.0f));
         shaderObject.setVec3("light.specular", vec3(1.0f));
-        shaderObject.setVec4("light.direction", vec4(lightPos, 1.0f));
+        shaderObject.setVec4("light.direction", -vec4(lightPos, 0.0f));
 
         shaderObject.setVec3("viewPos", camera.Position);
         mat4 projection = mat4(1.0f);
