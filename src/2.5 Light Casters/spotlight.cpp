@@ -199,10 +199,14 @@ int main()
         // 材质设置(各个类型光照的颜色和反光度)
         shaderObject.setFloat("material.shininess", 0.25f * 128);
         // 光照设置(光照位置和光照强度)
-        shaderObject.setVec3("light.ambient", vec3(.3f));
+
+        shaderObject.setVec3("light.ambient", vec3(1.0f));
         shaderObject.setVec3("light.diffuse", vec3(1.0f));
         shaderObject.setVec3("light.specular", vec3(1.0f));
-        shaderObject.setVec4("light.direction", vec4(lightPos, 1.0f));
+
+        shaderObject.setVec3("light.position", camera.Position);
+        shaderObject.setVec3("light.direction", camera.Front);
+        shaderObject.setFloat("light.cutOff", cos(radians(15.0f)));
 
         shaderObject.setVec3("viewPos", camera.Position);
         mat4 projection = mat4(1.0f);
