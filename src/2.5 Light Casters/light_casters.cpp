@@ -196,10 +196,10 @@ int main()
         // 材质设置(各个类型光照的颜色和反光度)
         shaderObject.setFloat("material.shininess", 0.25f * 128);
         // 光照设置(光照位置和光照强度)
-        shaderObject.setVec3("light.ambient", vec3(1.0f));
+        shaderObject.setVec3("light.ambient", vec3(.3f));
         shaderObject.setVec3("light.diffuse", vec3(1.0f));
         shaderObject.setVec3("light.specular", vec3(1.0f));
-        shaderObject.setVec3("light.position", lightPos);
+        shaderObject.setVec3("light.direction", -lightPos);
 
         shaderObject.setVec3("viewPos", camera.Position);
         mat4 projection = mat4(1.0f);
@@ -208,7 +208,7 @@ int main()
         shaderObject.setMat4("view", camera.GetViewMatrix());
 
         glBindVertexArray(VAO);
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 10; i++)
         {
             mat4 model = mat4(1.0f);
             model = translate(model, cubePositions[i]);

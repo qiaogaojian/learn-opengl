@@ -6,7 +6,8 @@ struct Material {
 };
 
 struct Light {
-    vec3 position;
+    // vec3 position; // 平行光不需要光照位置
+    vec3 direction;
 
     vec3 ambient;
     vec3 diffuse;
@@ -30,7 +31,7 @@ void main()
 
     // 漫反射
     vec3 normalDir=normalize(Normal);
-    vec3 lightDir=normalize(light.position - FragPos);
+    vec3 lightDir=normalize(-light.direction);
     float diff=max(dot(normalDir,lightDir),0);
     vec3 diffuse=light.diffuse * diff * vec3(texture(material.diffuse, TexCoord));
 
