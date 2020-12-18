@@ -159,9 +159,6 @@ int main()
     shaderObject.use();
     shaderObject.setInt("material.diffuse",0);
     shaderObject.setInt("material.specular",1);
-    shaderObject.setFloat("light.constant",  1.0f);
-    shaderObject.setFloat("light.linear",    0.009f);
-    shaderObject.setFloat("light.quadratic", 0.00032f);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -200,13 +197,17 @@ int main()
         shaderObject.setFloat("material.shininess", 0.25f * 128);
         // 光照设置(光照位置和光照强度)
 
-        shaderObject.setVec3("light.ambient", vec3(1.0f));
+        shaderObject.setVec3("light.ambient", vec3(.1f));
         shaderObject.setVec3("light.diffuse", vec3(1.0f));
         shaderObject.setVec3("light.specular", vec3(1.0f));
+        shaderObject.setFloat("light.constant",  1.0f);
+        shaderObject.setFloat("light.linear",    0.009f);
+        shaderObject.setFloat("light.quadratic", 0.00032f);
 
         shaderObject.setVec3("light.position", camera.Position);
         shaderObject.setVec3("light.direction", camera.Front);
         shaderObject.setFloat("light.cutOff", cos(radians(15.0f)));
+        shaderObject.setFloat("light.outerCutOff", cos(radians(18.0f)));
 
         shaderObject.setVec3("viewPos", camera.Position);
         mat4 projection = mat4(1.0f);

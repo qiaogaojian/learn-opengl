@@ -6,9 +6,10 @@ struct Material {
 };
 
 struct Light {
-    vec3  position;  // 聚光位置
-    vec3  direction; // 聚光方向
-    float cutOff;    // 切光角
+    vec3  position;     // 聚光位置
+    vec3  direction;    // 聚光方向
+    float cutOff;       // 切光角
+    float outerCutOff;  // 切光角
 
     vec3 ambient;
     vec3 diffuse;
@@ -32,24 +33,29 @@ uniform Light light;
 
 void main()
 {
-    vec3 lightDir = normalize(vec3(light.position) - FragPos);
-    float theta = dot(lightDir, normalize(-light.direction));
+    // 环境光
+    vec3 ambient = light.ambient * texture(material.diffuse, TexCoord).rgb;
+    // 漫反射
+    vec3 norm = normalize(Normal);
+    vec3 lightDir = normalize(light.position - FragPos);
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexCoord).rgb;
+    // 镜面反射
+    vec3 viewDir=normalize(viewPos-FragPos);
+    vec3 reflectDir=reflect(-lightDir,normalize(Normal));// 反射函数第一个参数是入射光方向 第二个参数是法线方向
+    float spec=pow(max(dot(viewDir,reflectDir),0),material.shininess);
+    vec3 specular=light.specular * spec * vec3(texture(material.specular,TexCoord));
 
+    // 聚光灯
+    float theta = dot(lightDir, normalize(-light.direction));
+    float epsilon   = light.cutOff - light.outerCutOff;
+    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
+
+    // 衰减
     float len = length(vec3(light.position) - FragPos);
     float attenuation  = 1 / (light.constant + light.linear * len + light.quadratic * len * len ); // 衰减
-    if (theta > light.cutOff) { // 聚光灯
-         // 环境光
-         vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoord));
-         // 聚光灯
-         vec3 spot = vec3(texture(material.diffuse, TexCoord)) * attenuation;
-         // 镜面反射
-         vec3 viewDir=normalize(viewPos-FragPos);
-         vec3 reflectDir=reflect(-lightDir,normalize(Normal));// 反射函数第一个参数是入射光方向 第二个参数是法线方向
-         float spec=pow(max(dot(viewDir,reflectDir),0),material.shininess);
-         vec3 specular=light.specular * spec * vec3(texture(material.specular,TexCoord)) * attenuation;
-         FragColor = vec4(ambient + spot + specular, 1.);
-    } else {                   // 只有环境光
-        vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoord));
-        FragColor = vec4(ambient ,1.);
-    }
+
+    vec3 result = (ambient + (diffuse + specular) * intensity) * attenuation;
+
+    FragColor = vec4(result, 1.);
 }
