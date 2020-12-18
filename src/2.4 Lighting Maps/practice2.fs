@@ -37,7 +37,7 @@ void main()
     // 镜面反射
     vec3 viewDir=normalize(viewPos-FragPos);
     vec3 reflectDir=reflect(-lightDir,normalDir);// 反射函数第一个参数是入射光方向 第二个参数是法线方向
-    float spec=pow(max(dot(viewDir,reflectDir),0),32);
+    float spec=pow(max(dot(viewDir,reflectDir),0),shininess);
     vec3 specular=light.specular * spec *(vec3(1.0) - vec3(texture(material.specular,TexCoord)));
 
     vec3 result=ambient+diffuse+specular;
