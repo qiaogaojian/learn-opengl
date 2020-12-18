@@ -152,8 +152,8 @@ int main()
     string texPath = shaderObject.concatString(getcwd(NULL, 0), "/res/texture/box2.png");
     unsigned int texture = loadTexture(texPath.c_str());
 
-    // 第二个材质 镜面反射贴图
-    texPath = shaderObject.concatString(getcwd(NULL, 0), "/res/texture/box2_specular.png");
+    // 第二个材质 镜面反射贴图 使用的彩色的镜面反射贴图 有点像蝴蝶的翅膀 会反射彩色的光
+    texPath = shaderObject.concatString(getcwd(NULL, 0), "/res/texture/box2_specular_color.png");
     unsigned int texture_specular = loadTexture(texPath.c_str());
 
     shaderObject.use();
