@@ -35,11 +35,13 @@ void main()
 {
     // 环境光
     vec3 ambient = light.ambient * texture(material.diffuse, TexCoord).rgb;
+
     // 漫反射
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(light.position - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexCoord).rgb;
+
     // 镜面反射
     vec3 viewDir=normalize(viewPos-FragPos);
     vec3 reflectDir=reflect(-lightDir,normalize(Normal));// 反射函数第一个参数是入射光方向 第二个参数是法线方向
