@@ -86,10 +86,10 @@ vec3 pointLightPositions[] = {
     vec3(0.0f, 0.0f, -3.0f)};
 
 vec3 pointLightColors[] = {
-    vec3(0.8f, 0.8f, 0.8f),
-    vec3(1.0f, 0.0f, 0.0f),
-    vec3(0.0f, 1.0f, 0.0f),
-    vec3(0.0f, 0.0f, 1.0f)};
+    vec3(0.0f, 0.5f, 0.0f),
+    vec3(0.0f, 0.5f, 0.0f),
+    vec3(0.0f, 0.5f, 0.0f),
+    vec3(0.0f, 0.5f, 0.0f)};
 
 vec3 lightPos(1.2f, 1.0f, 2.0f);
 
@@ -180,8 +180,8 @@ int main()
         lastFrame = time;
 
         //处理渲染
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);               // 设置状态
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 使用状态
+        glClearColor(229 / 255.0f, 229 / 255.0f, 229 / 255.0f, 1.0f); // 设置状态
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);           // 使用状态
         glEnable(GL_DEPTH_TEST);
 
         glActiveTexture(GL_TEXTURE0);
@@ -250,7 +250,7 @@ int main()
         shaderObject.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
         shaderObject.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
         shaderObject.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-        shaderObject.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+        shaderObject.setVec3("spotLight.diffuse", 0.0f, .8f, 0.0f);
         shaderObject.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
         shaderObject.setFloat("spotLight.constant", 1.0f);
         shaderObject.setFloat("spotLight.linear", 0.09);
