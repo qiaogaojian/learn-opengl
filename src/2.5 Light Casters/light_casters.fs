@@ -7,7 +7,7 @@ struct Material {
 
 struct Light {
     // vec3 position; // 平行光不需要光照位置
-    vec4 direction;
+    vec4 vector;
 
     vec3 ambient;
     vec3 diffuse;
