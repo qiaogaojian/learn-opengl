@@ -85,6 +85,12 @@ vec3 pointLightPositions[] = {
     vec3(-4.0f, 2.0f, -12.0f),
     vec3(0.0f, 0.0f, -3.0f)};
 
+vec3 pointLightColors[] = {
+    vec3(0.8f, 0.8f, 0.8f),
+    vec3(1.0f, 0.0f, 0.0f),
+    vec3(0.0f, 1.0f, 0.0f),
+    vec3(0.0f, 0.0f, 1.0f)};
+
 vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
@@ -161,13 +167,6 @@ int main()
     texPath = shaderObject.concatString(getcwd(NULL, 0), "/res/texture/box2_specular.png");
     unsigned int texture_specular = loadTexture(texPath.c_str());
 
-    shaderObject.use();
-    shaderObject.setInt("material.diffuse", 0);
-    shaderObject.setInt("material.specular", 1);
-    shaderObject.setFloat("light.constant", 1.0f);
-    shaderObject.setFloat("light.linear", 0.009f);
-    shaderObject.setFloat("light.quadratic", 0.00032f);
-
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
@@ -202,6 +201,8 @@ int main()
         vec3 spotColor = vec3(0.5f, 0.5f, 0.5f);
 
         // 材质设置(各个类型光照的颜色和反光度)
+        shaderObject.setInt("material.diffuse", 0);
+        shaderObject.setInt("material.specular", 1);
         shaderObject.setFloat("material.shininess", 0.25f * 128);
         shaderObject.setVec3("viewPos", camera.Position);
 
@@ -214,35 +215,35 @@ int main()
         // point light 1
         shaderObject.setVec3("pointLights[0].position", pointLightPositions[0]);
         shaderObject.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-        shaderObject.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-        shaderObject.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+        shaderObject.setVec3("pointLights[0].diffuse", pointLightColors[0]);
+        shaderObject.setVec3("pointLights[0].specular", pointLightColors[0]);
         shaderObject.setFloat("pointLights[0].constant", 1.0f);
         shaderObject.setFloat("pointLights[0].linear", 0.09);
         shaderObject.setFloat("pointLights[0].quadratic", 0.032);
         // point light 2
         shaderObject.setVec3("pointLights[1].position", pointLightPositions[1]);
         shaderObject.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-        shaderObject.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-        shaderObject.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+        shaderObject.setVec3("pointLights[1].diffuse", pointLightColors[1]);
+        shaderObject.setVec3("pointLights[1].specular", pointLightColors[1]);
         shaderObject.setFloat("pointLights[1].constant", 1.0f);
-        shaderObject.setFloat("pointLights[1].linear", 0.09);
-        shaderObject.setFloat("pointLights[1].quadratic", 0.032);
+        shaderObject.setFloat("pointLights[1].linear", 0.009);
+        shaderObject.setFloat("pointLights[1].quadratic", 0.00032);
         // point light 3
         shaderObject.setVec3("pointLights[2].position", pointLightPositions[2]);
         shaderObject.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-        shaderObject.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-        shaderObject.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+        shaderObject.setVec3("pointLights[2].diffuse", pointLightColors[2]);
+        shaderObject.setVec3("pointLights[2].specular", pointLightColors[2]);
         shaderObject.setFloat("pointLights[2].constant", 1.0f);
-        shaderObject.setFloat("pointLights[2].linear", 0.09);
-        shaderObject.setFloat("pointLights[2].quadratic", 0.032);
+        shaderObject.setFloat("pointLights[2].linear", 0.009);
+        shaderObject.setFloat("pointLights[2].quadratic", 0.00032);
         // point light 4
         shaderObject.setVec3("pointLights[3].position", pointLightPositions[3]);
         shaderObject.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-        shaderObject.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-        shaderObject.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+        shaderObject.setVec3("pointLights[3].diffuse", pointLightColors[3]);
+        shaderObject.setVec3("pointLights[3].specular", pointLightColors[3]);
         shaderObject.setFloat("pointLights[3].constant", 1.0f);
-        shaderObject.setFloat("pointLights[3].linear", 0.09);
-        shaderObject.setFloat("pointLights[3].quadratic", 0.032);
+        shaderObject.setFloat("pointLights[3].linear", 0.009);
+        shaderObject.setFloat("pointLights[3].quadratic", 0.00032);
         // spotLight
         shaderObject.setVec3("spotLight.position", camera.Position);
         shaderObject.setVec3("spotLight.direction", camera.Front);
@@ -273,12 +274,12 @@ int main()
 
         // 绘制灯
         shaderLight.use();
-        shaderLight.setVec3("lightColor", vec3(1.0f));
         shaderLight.setMat4("projection", projection);
         shaderLight.setMat4("view", camera.GetViewMatrix());
 
         for (int i = 0; i < 4; i++)
         {
+            shaderLight.setVec3("lightColor", pointLightColors[i]);
             mat4 modelLight = mat4(1.0f);
             modelLight = translate(modelLight, pointLightPositions[i]);
             modelLight = scale(modelLight, vec3(0.2f));
