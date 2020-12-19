@@ -25,48 +25,47 @@ bool isFirstCursor = true;
 
 float vertices[] = {
     // positions          // normals           // texture coords
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+    0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+    0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+    -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
 
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+    0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
 
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
-};
+    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+    0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
 
 vec3 cubePositions[] = {
     glm::vec3(0.0f, 0.0f, 0.0f),
@@ -80,13 +79,19 @@ vec3 cubePositions[] = {
     glm::vec3(1.5f, 0.2f, -1.5f),
     glm::vec3(-1.3f, 1.0f, -1.5f)};
 
+vec3 pointLightPositions[] = {
+    vec3(0.7f, 0.2f, 2.0f),
+    vec3(2.3f, -3.3f, -4.0f),
+    vec3(-4.0f, 2.0f, -12.0f),
+    vec3(0.0f, 0.0f, -3.0f)};
+
 vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
-unsigned int loadTexture(char const * path);
+unsigned int loadTexture(char const *path);
 
 int main()
 {
@@ -157,10 +162,10 @@ int main()
     unsigned int texture_specular = loadTexture(texPath.c_str());
 
     shaderObject.use();
-    shaderObject.setInt("material.diffuse",0);
-    shaderObject.setInt("material.specular",1);
-    shaderObject.setFloat("light.constant",  1.0f);
-    shaderObject.setFloat("light.linear",    0.009f);
+    shaderObject.setInt("material.diffuse", 0);
+    shaderObject.setInt("material.specular", 1);
+    shaderObject.setFloat("light.constant", 1.0f);
+    shaderObject.setFloat("light.linear", 0.009f);
     shaderObject.setFloat("light.quadratic", 0.00032f);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏鼠标
@@ -198,13 +203,58 @@ int main()
 
         // 材质设置(各个类型光照的颜色和反光度)
         shaderObject.setFloat("material.shininess", 0.25f * 128);
-        // 光照设置(光照位置和光照强度)
-        shaderObject.setVec3("light.ambient", vec3(1.0f));
-        shaderObject.setVec3("light.diffuse", vec3(1.0f));
-        shaderObject.setVec3("light.specular", vec3(1.0f));
-        shaderObject.setVec4("light.direction", vec4(lightPos, 1.0f));
-
         shaderObject.setVec3("viewPos", camera.Position);
+
+        // 光照设置(光照位置和光照强度)
+        shaderObject.setVec3("dirLight.ambient", vec3(1.0f));
+        shaderObject.setVec3("dirLight.diffuse", vec3(1.0f));
+        shaderObject.setVec3("dirLight.specular", vec3(1.0f));
+        shaderObject.setVec3("dirLight.direction", vec3(-0.2f, -1.0f, -0.3f));
+
+        // point light 1
+        shaderObject.setVec3("pointLights[0].position", pointLightPositions[0]);
+        shaderObject.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+        shaderObject.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+        shaderObject.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+        shaderObject.setFloat("pointLights[0].constant", 1.0f);
+        shaderObject.setFloat("pointLights[0].linear", 0.09);
+        shaderObject.setFloat("pointLights[0].quadratic", 0.032);
+        // point light 2
+        shaderObject.setVec3("pointLights[1].position", pointLightPositions[1]);
+        shaderObject.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+        shaderObject.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+        shaderObject.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+        shaderObject.setFloat("pointLights[1].constant", 1.0f);
+        shaderObject.setFloat("pointLights[1].linear", 0.09);
+        shaderObject.setFloat("pointLights[1].quadratic", 0.032);
+        // point light 3
+        shaderObject.setVec3("pointLights[2].position", pointLightPositions[2]);
+        shaderObject.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+        shaderObject.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+        shaderObject.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+        shaderObject.setFloat("pointLights[2].constant", 1.0f);
+        shaderObject.setFloat("pointLights[2].linear", 0.09);
+        shaderObject.setFloat("pointLights[2].quadratic", 0.032);
+        // point light 4
+        shaderObject.setVec3("pointLights[3].position", pointLightPositions[3]);
+        shaderObject.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+        shaderObject.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+        shaderObject.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+        shaderObject.setFloat("pointLights[3].constant", 1.0f);
+        shaderObject.setFloat("pointLights[3].linear", 0.09);
+        shaderObject.setFloat("pointLights[3].quadratic", 0.032);
+        // spotLight
+        shaderObject.setVec3("spotLight.position", camera.Position);
+        shaderObject.setVec3("spotLight.direction", camera.Front);
+        shaderObject.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+        shaderObject.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+        shaderObject.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+        shaderObject.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+        shaderObject.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+        shaderObject.setFloat("spotLight.constant", 1.0f);
+        shaderObject.setFloat("spotLight.linear", 0.09);
+        shaderObject.setFloat("spotLight.quadratic", 0.032);
+
         mat4 projection = mat4(1.0f);
         projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         shaderObject.setMat4("projection", projection);
@@ -226,12 +276,16 @@ int main()
         shaderLight.setVec3("lightColor", vec3(1.0f));
         shaderLight.setMat4("projection", projection);
         shaderLight.setMat4("view", camera.GetViewMatrix());
-        mat4 modelLight = mat4(1.0f);
-        modelLight = translate(modelLight, lightPos);
-        modelLight = scale(modelLight, vec3(0.2f));
-        shaderLight.setMat4("model", modelLight);
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        for (int i = 0; i < 4; i++)
+        {
+            mat4 modelLight = mat4(1.0f);
+            modelLight = translate(modelLight, pointLightPositions[i]);
+            modelLight = scale(modelLight, vec3(0.2f));
+            shaderLight.setMat4("model", modelLight);
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         // 检查并调用事件，交换缓冲完成绘制
         glfwPollEvents();        // 检查有没有触发什么事件（比如键盘输入、鼠标移动等）、更新窗口状态，并调用对应的回调函数（可以通过回调方法手动设置）
@@ -315,7 +369,7 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 }
 
 // 从路径加载材质 返回材质ID
-unsigned int loadTexture(char const * path)
+unsigned int loadTexture(char const *path)
 {
     unsigned int textureID;
     glGenTextures(1, &textureID);
