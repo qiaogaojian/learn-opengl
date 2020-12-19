@@ -19,10 +19,12 @@
           "-I\"${workspaceRoot}/include/glfw-3.3.2.bin.WIN32/include\"",
           "-I\"${workspaceRoot}/include/glm-0.9.8.0\"",
           "-I\"${workspaceRoot}/include/utils\"",
+          "-I\"${workspaceFolder}/include/assimp/include\"",
           // 链接库目录
           "-L\"${workspaceRoot}/include/glad/lib\"",
           "-L\"${workspaceRoot}/include/glfw-3.3.2.bin.WIN32/lib-mingw\"",
           "-L\"${workspaceRoot}/include/mingw32\"",
+          "-L\"${workspaceFolder}/include/assimp/lib\"",
           // 链接静态库
           "-lglfw3",
           "-lgdi32",
