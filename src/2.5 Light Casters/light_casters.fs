@@ -38,11 +38,11 @@ void main()
     vec3 normalDir=normalize(Normal);
     vec3 lightDir;
     float attenuation  = 1.0;
-    if (light.direction.w == 0){ // 平行光
-        lightDir=normalize(-vec3(light.direction));
+    if (light.vector.w == 0){ // 平行光
+        lightDir=normalize(-vec3(light.vector));
     } else {                     // 点光
-        lightDir=normalize(vec3(light.direction) - FragPos);
-        float len = length(vec3(light.direction) - FragPos);
+        lightDir=normalize(vec3(light.vector) - FragPos);
+        float len = length(vec3(light.vector) - FragPos);
         attenuation  = 1 / (light.constant + light.linear * len + light.quadratic * len * len ); // 衰减
     }
 
