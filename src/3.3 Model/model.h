@@ -2,6 +2,7 @@
 #define MODEL_H
 
 #include <glad/glad.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb_image.h>
@@ -9,18 +10,25 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include <shader_loader.h>
 #include <mesh.h>
+#include <shader_loader.h>
+#include <tools.h>
 
+#include <direct.h>
 #include <string>
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <map>
 #include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 using namespace std;
 using namespace glm;
+using namespace Assimp;
 
 unsigned int TextureFromFile(const char *path, const string &directory, bool gamma = false);
 
@@ -34,7 +42,7 @@ public:
 
     Model(char *path)
     {
-        loadModel(path);
+        loadModel(concatString(getcwd(NULL, 0),path));
     }
     void Draw(ShaderLoader shader)
     {
@@ -45,17 +53,22 @@ public:
     }
 
 private:
+    // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
     void loadModel(string const &path)
     {
+        // read file via ASSIMP
         Assimp::Importer importer;
-        const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-            ;
+        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+        // check for errors
+        if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
         {
-            cout << "ERROR:ASSIMP::" << importer.GetErrorString() << endl;
+            cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
             return;
         }
+        // retrieve the directory path of the filepath
         directory = path.substr(0, path.find_last_of('/'));
+
+        // process ASSIMP's root node recursively
         processNode(scene->mRootNode, scene);
     }
 
@@ -172,7 +185,7 @@ private:
     }
 };
 
-unsigned int TextureFromFile(const char *path, const string &directory, bool gamma = false)
+unsigned int TextureFromFile(const char *path, const string &directory, bool gamma)
 {
     string filename = string(path);
     filename = directory + '/' + filename;
@@ -192,7 +205,8 @@ unsigned int TextureFromFile(const char *path, const string &directory, bool gam
         else if (nrComponents == 3)
         {
             format = GL_RGB;
-        } else if (nrComponents == 4)
+        }
+        else if (nrComponents == 4)
         {
             format = GL_RGBA;
         }
