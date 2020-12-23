@@ -3,7 +3,7 @@
   "tasks": [
     {
       "type": "cppbuild",
-      "label": "CCC",
+      "label": "compile",
       "command": "cl",
       "args": [
         "/Od",
@@ -21,21 +21,17 @@
         "include/utils/shader_loader.cpp",
         "include/utils/stb_image.cpp",
         "include/assimp/lib/assimp.lib",
-        "include/GLFW/lib-vc2019/glfw3.lib",
-        "include/GLEW/lib/Release/Win32/glew32s.lib",
+        "include/glfw/lib-vc2019/glfw3.lib",
         "include/glad/lib/glad.o",
         "D:/Windows Kits/10/Lib/10.0.19041.0/um/x86/OpenGL32.Lib",
         "D:/Windows Kits/10/Lib/10.0.19041.0/um/x86/User32.Lib",
         "D:/Windows Kits/10/Lib/10.0.19041.0/um/x86/Gdi32.Lib",
         "D:/Windows Kits/10/Lib/10.0.19041.0/um/x86/shell32.lib",
-        "/Iinclude/GLFW/include",
-        "/Iinclude/GLEW/include",
+        "/Iinclude/glfw/include",
         "/Iinclude/glad/include",
-        "/Iinclude/glfw-3.3.2.bin.WIN32/include",
-        "/Iinclude/glm-0.9.8.0",
+        "/Iinclude/glm",
         "/Iinclude/utils",
-        "/Iinclude/assimp/include",
-        "/Link /NODEFAULTLIB:msvcrt.lib"
+        "/Iinclude/assimp/include"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
