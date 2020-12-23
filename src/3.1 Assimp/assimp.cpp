@@ -178,7 +178,7 @@ int main()
         deltaTime = time - lastFrame;
         lastFrame = time;
 
-        //处理渲染
+        // 处理渲染
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);               // 设置状态
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 使用状态
         glEnable(GL_DEPTH_TEST);

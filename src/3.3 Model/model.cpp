@@ -12,6 +12,7 @@
 #include <direct.h>
 #include <iostream>
 
+using namespace std;
 using namespace glm;
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
@@ -33,10 +34,12 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+vec3 lightPos(1.2f, 1.0f, 2.0f);
+
 int main()
 {
-    // glfw: initialize and configure
-    // ------------------------------
+    // ≥ı ºªØ∫Õ≈‰÷√ glfw
+    //--------------------------------------------------------------------------------------
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -46,8 +49,8 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    // glfw window creation
-    // --------------------
+    // ¥¥Ω®¥∞ø⁄∂‘œÛ
+    //--------------------------------------------------------------------------------------
     GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
@@ -59,62 +62,60 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
+    // glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // “˛≤ÿ Û±Í
 
-    // tell GLFW to capture our mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
+    // ≥ı ºªØ glad  º”‘ÿÀ˘”– opengl µƒ∫Ø ˝÷∏’Î
+    //--------------------------------------------------------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
 
-    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-    stbi_set_flip_vertically_on_load(true);
-
-    // configure global opengl state
-    // -----------------------------
-    glEnable(GL_DEPTH_TEST);
-
-    // build and compile shaders
-    // -------------------------
-    char *vsPath = "/src/3.3 Model/model_loading.vs";
-    char *fsPath = "/src/3.3 Model/model_loading.fs";
+    // ππΩ®∫Õ±‡“Î shader ≥Ã–Ú
+    //--------------------------------------------------------------------------------------
+    char *vsPath = "/src/3.3 Model/model.vs";
+    char *fsPath = "/src/3.3 Model/model.fs";
     ShaderLoader ourShader(vsPath, fsPath);
 
-    // load models
-    // -----------
+    // º”‘ÿƒ£–Õ
+    //--------------------------------------------------------------------------------------
+    stbi_set_flip_vertically_on_load(true); // º”‘ÿƒ£–Õ«∞∑≠◊™≤ƒ÷ Y÷·
     char *modelPath = "/res/model/nanosuit/nanosuit.obj";
     Model ourModel(concatString(_getcwd(NULL, 0), modelPath));
 
-    // draw in wireframe
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // …Ë÷√OpenGL»´æ÷◊¥Ã¨
+    //--------------------------------------------------------------------------------------
+    glEnable(GL_DEPTH_TEST);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    // render loop
-    // -----------
     while (!glfwWindowShouldClose(window))
     {
-        // per-frame time logic
-        // --------------------
+        // ÷°º‰∏Ù ±º‰
         float currentFrame = (float)glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        // input
-        // -----
+        // ¥¶¿Ì ‰»Î
         processInput(window);
 
-        // render
-        // ------
+        // ¥¶¿Ì‰÷»æ
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // don't forget to enable shader before setting uniforms
+        // …Ë÷√ uniform ÷Æ«∞“™œ»º§ªÓshader
         ourShader.use();
 
-        // view/projection transformations
+        // ≤ƒ÷ …Ë÷√(∏˜∏ˆ¿‡–Õπ‚’’µƒ—’…´∫Õ∑¥π‚∂»)
+        ourShader.setFloat("material.shininess", 0.25f * 128);
+        // π‚’’…Ë÷√(π‚’’Œª÷√∫Õπ‚’’«ø∂»)
+        ourShader.setVec3("light.ambient", vec3(.3f));
+        ourShader.setVec3("light.diffuse", vec3(1.0f));
+        ourShader.setVec3("light.specular", vec3(1.0f));
+        ourShader.setVec4("light.vector", vec4(lightPos, 1.0f));
+        ourShader.setVec3("viewPos", camera.Position);
+
+        // MVP◊¯±Í◊™ªª(model/view/projection)
         mat4 projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("projection", projection);
@@ -122,8 +123,8 @@ int main()
 
         // render the loaded model
         mat4 model = mat4(1.0f);
-        model = translate(model, vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = scale(model, vec3(1.0f, 1.0f, 1.0f));     // it's a bit too big for our scene, so scale it down
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));     // it's a bit too big for our scene, so scale it down
         ourShader.setMat4("model", model);
         ourModel.Draw(ourShader);
 
@@ -175,7 +176,7 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
     camera.ProcessMouseScroll(yoffset);
 }
 
-// Â§ÑÁêÜËæìÂÖ•
+// ¥¶¿Ì ‰»Î
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -191,8 +192,8 @@ void processInput(GLFWwindow *window)
     {
         camera.ProcessKeyboard(BACKWARD, deltaTime);
     }
-    // Ê≥®ÊÑèÔºåÊàë‰ª¨ÂØπÂè≥ÂêëÈáèËøõË°å‰∫ÜÊ†áÂáÜÂåñ„ÄÇÂ¶ÇÊûúÊàë‰ª¨Ê≤°ÂØπËøô‰∏™ÂêëÈáèËøõË°åÊ†áÂáÜÂåñÔºåÊúÄÂêéÁöÑÂèâ‰πòÁªìÊûú‰ºöÊ†πÊçÆcameraFrontÂèòÈáèËøîÂõûÂ§ßÂ∞è‰∏çÂêåÁöÑÂêëÈáè„ÄÇ
-    // Â¶ÇÊûúÊàë‰ª¨‰∏çÂØπÂêëÈáèËøõË°åÊ†áÂáÜÂåñÔºåÊàë‰ª¨Â∞±ÂæóÊ†πÊçÆÊëÑÂÉèÊú∫ÁöÑÊúùÂêë‰∏çÂêåÂä†ÈÄüÊàñÂáèÈÄüÁßªÂä®‰∫ÜÔºå‰ΩÜÂ¶ÇÊûúËøõË°å‰∫ÜÊ†áÂáÜÂåñÁßªÂä®Â∞±ÊòØÂåÄÈÄüÁöÑ„ÄÇ
+    // ◊¢“‚£¨Œ“√«∂‘”“œÚ¡øΩ¯––¡À±Í◊ºªØ°£»Áπ˚Œ“√«√ª∂‘’‚∏ˆœÚ¡øΩ¯––±Í◊ºªØ£¨◊Ó∫Ûµƒ≤Ê≥ÀΩ·π˚ª·∏˘æ›cameraFront±‰¡ø∑µªÿ¥Û–°≤ªÕ¨µƒœÚ¡ø°£
+    // »Áπ˚Œ“√«≤ª∂‘œÚ¡øΩ¯––±Í◊ºªØ£¨Œ“√«æÕµ√∏˘æ›…„œÒª˙µƒ≥ØœÚ≤ªÕ¨º”ÀŸªÚºıÀŸ“∆∂Ø¡À£¨µ´»Áπ˚Ω¯––¡À±Í◊ºªØ“∆∂ØæÕ «‘»ÀŸµƒ°£
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
         camera.ProcessKeyboard(LEFT, deltaTime);
