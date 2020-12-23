@@ -11,7 +11,7 @@
         "${workspaceFolder}/include/assimp/include",
         "${workspaceFolder}/include/glad/include"
       ],
-      "defines": ["_DEBUG", "UTF-8", "_UTF-8"],
+      "defines": ["_DEBUG", "gb2312", "_gb2312"],
       "intelliSenseMode": "msvc-x64",
       "browse": {
         "path": [
