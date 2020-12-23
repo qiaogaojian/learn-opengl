@@ -25,7 +25,8 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-Camera camera(vec3(0.0f, 10.0f, 10.0f));
+vec3 cameraPos = vec3(1.0f, 1.0f, 3.0f);
+Camera camera(cameraPos, vec3(0.0f, 1.0f, 0.0f), -100, 0);
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -35,6 +36,51 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 vec3 lightPos(1.2f, 1.0f, 2.0f);
+
+
+float vertices[] = {
+    // positions          // normals           // texture coords
+    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+    0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+    0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+    -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+
+    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+    0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+    -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+
+    -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+
+    0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+    0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+    0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+
+    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+    0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+    0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+    0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+    -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+    -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
 
 int main()
 {
@@ -77,6 +123,8 @@ int main()
     char *vsPath = "/src/3.3 Model/model.vs";
     char *fsPath = "/src/3.3 Model/model.fs";
     ShaderLoader ourShader(vsPath, fsPath);
+        char *fsLightPath = "/src/2.3 Materials/light.fs";
+    ShaderLoader shaderLight(vsPath, fsLightPath, nullptr); // 发光物体shader程序
 
     // 加载模型
     //--------------------------------------------------------------------------------------
@@ -84,10 +132,35 @@ int main()
     char *modelPath = "/res/model/nanosuit/nanosuit.obj";
     Model ourModel(concatString(_getcwd(NULL, 0), modelPath));
 
+    // 发光体数据
+    //--------------------------------------------------------------------------------------
+    // 受光物体缓冲数据
+    unsigned int VAO;
+    unsigned int VBO;
+    // 生成 VAO VBO
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    // 首先绑定VAO
+    glBindVertexArray(VAO);
+    // 然后绑定并设置VBO
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // 然后设置顶点属性
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0));
+    glEnableVertexAttribArray(0);
+
     // 设置OpenGL全局状态
     //--------------------------------------------------------------------------------------
     glEnable(GL_DEPTH_TEST);
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    ourShader.use();
+    ourShader.setInt("material.diffuse", 0);
+    ourShader.setInt("material.specular", 1);
+    ourShader.setFloat("light.constant", 1.0f);
+    ourShader.setFloat("light.linear", 0.09f);
+    ourShader.setFloat("light.quadratic", 0.032f);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -113,23 +186,39 @@ int main()
         ourShader.setVec3("light.diffuse", vec3(1.0f));
         ourShader.setVec3("light.specular", vec3(1.0f));
         ourShader.setVec4("light.vector", vec4(lightPos, 1.0f));
+
         ourShader.setVec3("viewPos", camera.Position);
-
-        // MVP坐标转换(model/view/projection)
-        mat4 projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        mat4 view = camera.GetViewMatrix();
+        mat4 projection = mat4(1.0f);
+        projection = perspective(radians(camera.Zoom), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
         ourShader.setMat4("projection", projection);
-        ourShader.setMat4("view", view);
+        ourShader.setMat4("view", camera.GetViewMatrix());
 
-        // render the loaded model
         mat4 model = mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));     // it's a bit too big for our scene, so scale it down
+        model = translate(model, vec3(0.0f, 0.0f, 0.0f));
+        model = scale(model, vec3(0.1f, 0.1f, 0.1f));
         ourShader.setMat4("model", model);
+        ourShader.setMat3("normalMat", transpose(inverse(model)));
+
         ourModel.Draw(ourShader);
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
+        // 绘制灯
+        shaderLight.use();
+
+        vec3 lightColor = vec3(1.0f);
+        lightColor.x = sin(glfwGetTime() * 2.0f);
+        lightColor.y = sin(glfwGetTime() * 0.7f);
+        lightColor.z = sin(glfwGetTime() * 1.3f);
+
+        shaderLight.setVec3("lightColor", vec3(1.0f));
+        shaderLight.setMat4("projection", projection);
+        shaderLight.setMat4("view", camera.GetViewMatrix());
+        mat4 modelLight = mat4(1.0f);
+        modelLight = translate(modelLight, lightPos);
+        modelLight = scale(modelLight, vec3(0.2f));
+        shaderLight.setMat4("model", modelLight);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

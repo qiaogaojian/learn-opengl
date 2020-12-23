@@ -11,12 +11,11 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform mat3 normalMat; // 法线矩阵 用来消除不同比例缩放对法线方向的影响
-uniform sampler2D texture_normal1;
 
 void main()
 {
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
-    Normal = vec3(texture(texture_normal1, TexCoord));
+    Normal = normalMat * aNormal;
     FragPos = vec3(model * vec4(aPos,1.0));
     TexCoord = aTexCoord;
 }
