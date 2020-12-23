@@ -48,6 +48,7 @@ public:
     Camera(vec3 position = vec3(0.0f, 0.0f, 0.0f), vec3 up = vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
     {
         Position = position;
+        curPosY = Position.y;
         WorldUp = up;
         Yaw = yaw;
         Pitch = pitch;
@@ -57,6 +58,7 @@ public:
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
     {
         Position = vec3(posX, posY, posZ);
+        curPosY = Position.y;
         WorldUp = vec3(upX, upY, upZ);
         Yaw = yaw;
         Pitch = pitch;
