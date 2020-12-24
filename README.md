@@ -13,7 +13,7 @@
 
 - 安装带 C++ build tools 的Visual Studio, 下载独立的 [C++ build tools](https://visualstudio.microsoft.com/zh-hant/visual-cpp-build-tools/) 也可以.
 
-- 其他所用的库在项目中的include文件夹里
+- 其他所用的库在[项目](https://gitee.com/qiaogaojian/learn-opengl.git)中的include文件夹里
 
 ### 2.环境变量
 
