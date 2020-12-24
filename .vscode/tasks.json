@@ -31,7 +31,8 @@
         "/Iinclude/glad/include",
         "/Iinclude/glm",
         "/Iinclude/utils",
-        "/Iinclude/assimp/include"
+        "/Iinclude/assimp/include",
+        "/Link /NODEFAULTLIB:msvcrt.lib"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
