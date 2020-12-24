@@ -17,6 +17,12 @@
 
 ### 2.环境变量
 
+- Path中添加assimp库
+
+  ``` sh
+  D:\Opengl\Assimp\bin\x86  # 这样就不需要把assimp.dll放到build目录了
+  ```
+
 - 新建INCLUDE环境变量,添加以下目录
 
   ```sh
@@ -28,7 +34,6 @@
   D:\Windows Kits\10\Include\10.0.19041.0\shared
   D:\Windows Kits\10\Include\10.0.19041.0\winrt
   D:\Windows Kits\10\Include\10.0.19041.0\cppwinrt
-  D:\Opengl\Assimp\bin\x86  # 这样就不需要把assimp.dll放到build目录了
   ```
 
 - 新建LIB环境变量,添加以下目录
